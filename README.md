@@ -27,7 +27,7 @@ export const OPENAI_API_KEY = "your_key_here";
 // Add any other keys you need
 ```
 
-> ⚠️ **Security Note**: Storing API keys directly in source code is not recommended for production environments. This is only for local development and learning purposes.
+> ⚠️ **Security Note**: Storing API keys directly in source code is not recommended for production environments. This is only for local development and learning purposes. You can set the env var inline in the Cursor MCP interface as well.
 
 ### 2. Installation
 
