@@ -5,3 +5,5 @@ Added the init_cursor tool to initialize the cursor-template directory in new pr
 Updated architect tool to support XML template compilation and task prompting, preparing for integration with the repomix tool.
 
 Added repomix integration to architect tool to automatically generate codebase content for the XML template.
+
+Refactored architect tool to use shared utility functions for file operations and template compilation.

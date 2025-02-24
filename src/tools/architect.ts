@@ -1,9 +1,7 @@
 import { z } from "zod";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "../env/keys.js";
-import fs from 'fs/promises';
-import path from 'path';
-import { execSync } from 'child_process';
+import { compileTemplate, writeFile } from "../utils.js";
 
 /**
  * Architect tool
@@ -19,77 +17,14 @@ export const architectToolDescription =
   "Analyzes a task description and codebase to generate detailed implementation steps.";
 
 export const ArchitectToolSchema = z.object({
-  task: z.string().optional().describe("Description of the task - will prompt if not provided"),
+  task: z.string().min(1, "Task description is required.").describe("Description of the task - will prompt if not provided"),
   templatePath: z.string().default("src/cursor-template/template.xml").describe("Path to the template XML file"),
   rulesPath: z.string().default("src/cursor-template/rules.md").describe("Path to the rules markdown file"),
   outputPath: z.string().default(".cursor/tasks.md").describe("Path where tasks.md should be written"),
   repomixConfigPath: z.string().default("repomix.config.json").describe("Path to the repomix config file"),
+  code: z.string().optional().describe("Code to analyze"),
 });
 
-/**
- * Reads and returns the contents of a file
- */
-async function readFile(filePath: string): Promise<string> {
-  try {
-    return await fs.readFile(filePath, 'utf-8');
-  } catch (error) {
-    throw new Error(`Failed to read file ${filePath}: ${error}`);
-  }
-}
-
-/**
- * Writes content to a file, creating directories if needed
- */
-async function writeFile(filePath: string, content: string): Promise<void> {
-  try {
-    await fs.mkdir(path.dirname(filePath), { recursive: true });
-    await fs.writeFile(filePath, content, 'utf-8');
-  } catch (error) {
-    throw new Error(`Failed to write file ${filePath}: ${error}`);
-  }
-}
-
-/**
- * Runs repomix to generate the codebase content
- */
-async function runRepomix(configPath: string): Promise<string> {
-  try {
-    // Run repomix with the config file
-    const output = execSync(`npx repomix --config ${configPath}`, {
-      encoding: 'utf-8',
-    });
-    return output;
-  } catch (error) {
-    throw new Error(`Failed to run repomix: ${error}`);
-  }
-}
-
-/**
- * Compiles the XML template with all required sections
- */
-async function compileTemplate(
-  task: string,
-  templatePath: string,
-  rulesPath: string,
-  repomixConfigPath: string
-): Promise<string> {
-  try {
-    // Read the base template and rules
-    const templateXml = await readFile(templatePath);
-    const rules = await readFile(rulesPath);
-
-    // Generate codebase content using repomix
-    const codebaseContent = await runRepomix(repomixConfigPath);
-
-    // Replace template sections
-    return templateXml
-      .replace("<!-- REPOMIX CODEBASE -->", codebaseContent)
-      .replace("<!-- TASK DESCRIPTION -->", task)
-      .replace("<!-- CURSOR RULES -->", rules);
-  } catch (error) {
-    throw new Error(`Failed to compile template: ${error}`);
-  }
-}
 
 export async function runArchitectTool(
   args: z.infer<typeof ArchitectToolSchema>,
@@ -113,12 +48,12 @@ export async function runArchitectTool(
     }
 
     // Compile the template with all sections
-    const compiledTemplate = await compileTemplate(
-      args.task,
-      args.templatePath,
-      args.rulesPath,
-      args.repomixConfigPath
-    );
+  const compiledTemplate = await compileTemplate(
+    args.task,
+    args.templatePath,
+    args.rulesPath,
+    args.repomixConfigPath
+  );
 
     // Generate implementation steps using OpenAI
     const response = await openai.chat.completions.create({
