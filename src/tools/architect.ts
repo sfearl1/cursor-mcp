@@ -2,7 +2,7 @@ import { z } from "zod";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "../env/keys.js";
 import fs from 'fs/promises';
-import { TemplateBuilder } from "../services/template-builder.js";
+import { TemplateBuilder } from '../services/template-builder.js';
 import path from 'path';
 
 /**
@@ -27,14 +27,7 @@ export const ArchitectToolSchema = z.object({
   code: z.string().optional().describe("Code to analyze"),
 });
 
-export async function runArchitectTool(
-  args: z.infer<typeof ArchitectToolSchema>,
-) {
-  // Instantiate the OpenAI client
-  const openai = new OpenAI({
-    apiKey: OPENAI_API_KEY,
-  });
-
+export async function runArchitectTool(args: z.infer<typeof ArchitectToolSchema>) {
   try {
     // If task not provided, return a prompt message
     if (!args.task) {
@@ -49,23 +42,24 @@ export async function runArchitectTool(
     }
 
     // Create template builder and compile template
-    const builder = new TemplateBuilder('architect');
-    const { xml: compiledTemplate, config } = await builder.compile(
-      args.task,
-      args.repomixConfigPath
-    );
+    const builder = new TemplateBuilder();
+    const result = await builder.compile(args.templatePath, args.repomixConfigPath);
 
     // Generate implementation steps using OpenAI
+    const openai = new OpenAI({
+      apiKey: OPENAI_API_KEY,
+    });
+
     const response = await openai.chat.completions.create({
       model: "o3-mini-2025-01-31",
       messages: [
         {
           role: "system",
-          content: config.prompt,
+          content: "You are an expert software architect. Given a task and codebase, outline detailed implementation steps for an AI coding agent.",
         },
         {
           role: "user",
-          content: compiledTemplate,
+          content: result.content,
         },
       ],
     });

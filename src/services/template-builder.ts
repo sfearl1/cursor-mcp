@@ -1,53 +1,76 @@
-import { execSync } from 'child_process';
-import { TemplateSection, ToolConfig, ToolName, CompiledTemplate } from '../types/template.js';
 import { baseTemplate } from '../templates/base.js';
-import { architectConfig, sharedConfig } from '../templates/configs.js';
-
-/**
- * Runs repomix to generate the codebase content
- */
-async function runRepomix(configPath: string): Promise<string> {
-  try {
-    const output = execSync(`npx repomix --config ${configPath}`, {
-      encoding: 'utf-8',
-    });
-    return output;
-  } catch (error) {
-    throw new Error(`Failed to run repomix: ${error}`);
-  }
-}
+import { promises as fs } from 'fs';
+import path from 'path';
+import type { RepomixConfig, CompiledTemplate, TemplateSection } from '../types/template.js';
+import { pack } from 'repomix';
 
 export class TemplateBuilder {
-  private toolConfig: ToolConfig;
-  
-  constructor(toolName: ToolName) {
-    // For now, we only have architect config
-    this.toolConfig = toolName === 'architect' ? architectConfig : architectConfig;
+  constructor() {}
+
+  private async runRepomix(rootDir: string, configPath: string): Promise<string> {
+    try {
+      const config = JSON.parse(await fs.readFile(configPath, 'utf-8')) as RepomixConfig;
+      const result = await pack([rootDir], {
+        ...config,
+        cwd: process.cwd(),
+        output: {
+          filePath: path.join(process.cwd(), 'output.xml'),
+          style: 'xml',
+          parsableStyle: true,
+          fileSummary: true,
+          directoryStructure: true,
+          removeComments: false,
+          removeEmptyLines: false,
+          compress: false,
+          topFilesLength: 100,
+          showLineNumbers: true,
+          copyToClipboard: false
+        },
+        include: config.include || ['**/*'],
+        ignore: {
+          useGitignore: true,
+          useDefaultPatterns: true,
+          customPatterns: []
+        },
+        security: {
+          enableSecurityCheck: true
+        },
+        tokenCount: {
+          encoding: 'cl100k_base'
+        }
+      });
+      return result.toString();
+    } catch (error) {
+      throw new Error(`Failed to run Repomix: ${error}`);
+    }
   }
 
-  /**
-   * Compiles the template with all required sections
-   */
-  async compile(task: string, repomixConfigPath: string): Promise<CompiledTemplate> {
+  async compile(templatePath: string, configPath: string): Promise<CompiledTemplate> {
     try {
-      // Generate codebase content using repomix
-      const codebaseContent = await runRepomix(repomixConfigPath);
-
-      // Prepare template sections
-      const sections: TemplateSection = {
-        codebase: codebaseContent,
-        task,
-        rules: sharedConfig.rules,
-        instructions: this.toolConfig.instructions,
-        prompt: this.toolConfig.prompt
-      };
-
-      // Compile the template
-      const xml = baseTemplate(sections);
+      const content = await this.runRepomix(templatePath, configPath);
+      
+      // Create template sections
+      const sections: TemplateSection[] = [
+        {
+          name: 'codebase',
+          content
+        },
+        {
+          name: 'config',
+          content: await fs.readFile(configPath, 'utf-8')
+        }
+      ];
 
       return {
-        xml,
-        config: this.toolConfig
+        content: baseTemplate(sections),
+        metrics: {
+          totalFiles: 0, // TODO: Get from result when API is stable
+          totalCharacters: 0,
+          totalTokens: 0,
+          fileCharCounts: {},
+          fileTokenCounts: {},
+          suspiciousFilesResults: []
+        }
       };
     } catch (error) {
       throw new Error(`Failed to compile template: ${error}`);
