@@ -24,7 +24,7 @@ import {
   codeReviewToolDescription,
   CodeReviewToolSchema,
   runCodeReviewTool,
-} from "./tools/codeReview.js";
+} from "./tools/code_review.js";
 
 import {
   initCursorToolName,
@@ -34,11 +34,12 @@ import {
 } from "./tools/init_cursor.js";
 
 /**
- * A minimal MCP server providing four Cursor Tools:
- *   1) Screenshot
- *   2) Architect
- *   3) CodeReview
- *   4) InitCursor
+ * A minimal MCP server providing five Cursor Tools:
+ *   1) InitCursor
+ *   2) Screenshot
+ *   3) Architect
+ *   4) Designer
+ *   5) CodeReview
  */
 
 // 1. Create an MCP server instance
@@ -89,14 +90,25 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             task: {
               type: "string",
-              description: "Description of the task",
+              description: "Description of the task - will prompt if not provided",
             },
-            code: {
+            templatePath: {
               type: "string",
-              description: "Concatenated code from one or more files",
+              description: "Path to the template XML file",
+              default: "src/cursor-template/template.xml",
+            },
+            rulesPath: {
+              type: "string",
+              description: "Path to the rules markdown file",
+              default: "src/cursor-template/rules.md",
+            },
+            outputPath: {
+              type: "string",
+              description: "Path where tasks.md should be written",
+              default: ".cursor/tasks.md",
             },
           },
-          required: ["task", "code"],
+          required: [],
         },
       },
       {

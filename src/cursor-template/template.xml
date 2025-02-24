@@ -1,0 +1,24 @@
+
+<TEMPLATE>
+
+    <CODEBASE>
+    <!-- REPOMIX CODEBASE -->
+    </CODEBASE>
+
+    <TASK>
+    <!-- TASK DESCRIPTION -->
+    </TASK>
+
+    <RULES>
+    <!-- CURSOR RULES -->
+    </RULES>
+
+    <INSTRUCTIONS>
+    <!-- AGENT INSTRUCTIONS FOR THE TASK -->
+    </INSTRUCTIONS>
+
+    <PROMPT>
+    <!-- AGENT PROMPT -->
+    </PROMPT>
+
+</TEMPLATE>

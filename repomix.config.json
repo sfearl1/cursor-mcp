@@ -1,0 +1,31 @@
+{
+  "ignore": {
+    "useGitignore": false,
+    "customPatterns": [
+      "node_modules",
+      "dist",
+      "build",
+      ".cursor",
+      "code-base.md",
+      "src/cursor-template",
+      "README.md",
+      ".gitignore",
+      "repomix.config.json",
+      "package.json",
+      "package-lock.json",
+      "LICENSE"
+    ]
+  },
+  "output": {
+    "filePath": "project.xml",
+    "style": "xml",
+    "compress": false,
+    "fileSummary": true,
+    "directoryStructure": true,
+    "removeComments": false,
+    "removeEmptyLines": false,
+    "showLineNumbers": false,
+    "includeEmptyDirectories": false,
+    "instructionFilePath": [".cursor/agent-templates/architect.xml", ".cursor/agent-templates/designer.xml"]
+  }
+}
