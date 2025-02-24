@@ -3,10 +3,12 @@ import OpenAI from "openai";
 import { OPENAI_API_KEY } from "../env/keys.js";
 import fs from 'fs/promises';
 import path from 'path';
+import { execSync } from 'child_process';
 
 /**
  * Architect tool
  *   - Prompts for a task if not provided
+ *   - Runs repomix to generate codebase content
  *   - Compiles an XML template with the task and codebase
  *   - Uses OpenAI to generate detailed implementation steps
  *   - Creates a tasks.md file with the steps
@@ -21,6 +23,7 @@ export const ArchitectToolSchema = z.object({
   templatePath: z.string().default("src/cursor-template/template.xml").describe("Path to the template XML file"),
   rulesPath: z.string().default("src/cursor-template/rules.md").describe("Path to the rules markdown file"),
   outputPath: z.string().default(".cursor/tasks.md").describe("Path where tasks.md should be written"),
+  repomixConfigPath: z.string().default("repomix.config.json").describe("Path to the repomix config file"),
 });
 
 /**
@@ -47,16 +50,36 @@ async function writeFile(filePath: string, content: string): Promise<void> {
 }
 
 /**
+ * Runs repomix to generate the codebase content
+ */
+async function runRepomix(configPath: string): Promise<string> {
+  try {
+    // Run repomix with the config file
+    const output = execSync(`npx repomix --config ${configPath}`, {
+      encoding: 'utf-8',
+    });
+    return output;
+  } catch (error) {
+    throw new Error(`Failed to run repomix: ${error}`);
+  }
+}
+
+/**
  * Compiles the XML template with all required sections
  */
-async function compileTemplate(task: string, templatePath: string, rulesPath: string): Promise<string> {
+async function compileTemplate(
+  task: string,
+  templatePath: string,
+  rulesPath: string,
+  repomixConfigPath: string
+): Promise<string> {
   try {
-    // Read the base template
+    // Read the base template and rules
     const templateXml = await readFile(templatePath);
     const rules = await readFile(rulesPath);
 
-    // TODO: Once repomix tool is added, replace this with actual codebase content
-    const codebaseContent = "<!-- REPOMIX CODEBASE -->";
+    // Generate codebase content using repomix
+    const codebaseContent = await runRepomix(repomixConfigPath);
 
     // Replace template sections
     return templateXml
@@ -90,7 +113,12 @@ export async function runArchitectTool(
     }
 
     // Compile the template with all sections
-    const compiledTemplate = await compileTemplate(args.task, args.templatePath, args.rulesPath);
+    const compiledTemplate = await compileTemplate(
+      args.task,
+      args.templatePath,
+      args.rulesPath,
+      args.repomixConfigPath
+    );
 
     // Generate implementation steps using OpenAI
     const response = await openai.chat.completions.create({

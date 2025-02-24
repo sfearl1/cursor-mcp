@@ -107,6 +107,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: "Path where tasks.md should be written",
               default: ".cursor/tasks.md",
             },
+            repomixConfigPath: {
+              type: "string",
+              description: "Path to the repomix config file",
+              default: "repomix.config.json",
+            },
           },
           required: [],
         },
