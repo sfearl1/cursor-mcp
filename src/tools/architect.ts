@@ -1,7 +1,9 @@
 import { z } from "zod";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "../env/keys.js";
-import { compileTemplate, writeFile } from "../utils.js";
+import fs from 'fs/promises';
+import { TemplateBuilder } from "../services/template-builder.js";
+import path from 'path';
 
 /**
  * Architect tool
@@ -25,7 +27,6 @@ export const ArchitectToolSchema = z.object({
   code: z.string().optional().describe("Code to analyze"),
 });
 
-
 export async function runArchitectTool(
   args: z.infer<typeof ArchitectToolSchema>,
 ) {
@@ -47,13 +48,12 @@ export async function runArchitectTool(
       };
     }
 
-    // Compile the template with all sections
-  const compiledTemplate = await compileTemplate(
-    args.task,
-    args.templatePath,
-    args.rulesPath,
-    args.repomixConfigPath
-  );
+    // Create template builder and compile template
+    const builder = new TemplateBuilder('architect');
+    const { xml: compiledTemplate, config } = await builder.compile(
+      args.task,
+      args.repomixConfigPath
+    );
 
     // Generate implementation steps using OpenAI
     const response = await openai.chat.completions.create({
@@ -61,7 +61,7 @@ export async function runArchitectTool(
       messages: [
         {
           role: "system",
-          content: "You are an expert software architect. Given a task and codebase, outline detailed implementation steps for an AI coding agent.",
+          content: config.prompt,
         },
         {
           role: "user",
@@ -74,7 +74,8 @@ export async function runArchitectTool(
     const steps = response.choices?.[0]?.message?.content ?? "No response from model.";
 
     // Write the steps to tasks.md
-    await writeFile(args.outputPath, steps);
+    await fs.mkdir(path.dirname(args.outputPath), { recursive: true });
+    await fs.writeFile(args.outputPath, steps, 'utf-8');
 
     return {
       content: [
