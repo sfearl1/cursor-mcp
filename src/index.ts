@@ -26,11 +26,19 @@ import {
   runCodeReviewTool,
 } from "./tools/codeReview.js";
 
+import {
+  initCursorToolName,
+  initCursorToolDescription,
+  InitCursorToolSchema,
+  runInitCursorTool,
+} from "./tools/init_cursor.js";
+
 /**
- * A minimal MCP server providing three Cursor Tools:
+ * A minimal MCP server providing four Cursor Tools:
  *   1) Screenshot
  *   2) Architect
  *   3) CodeReview
+ *   4) InitCursor
  */
 
 // 1. Create an MCP server instance
@@ -106,6 +114,20 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ["folderPath"],
         },
       },
+      {
+        name: initCursorToolName,
+        description: initCursorToolDescription,
+        inputSchema: {
+          type: "object",
+          properties: {
+            destinationPath: {
+              type: "string",
+              description: "Full path where the template should be copied",
+            },
+          },
+          required: ["destinationPath"],
+        },
+      },
     ],
   };
 });
@@ -126,6 +148,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     case codeReviewToolName: {
       const validated = CodeReviewToolSchema.parse(args);
       return await runCodeReviewTool(validated);
+    }
+    case initCursorToolName: {
+      const validated = InitCursorToolSchema.parse(args);
+      return await runInitCursorTool(validated);
     }
     default:
       throw new Error(`Unknown tool: ${name}`);

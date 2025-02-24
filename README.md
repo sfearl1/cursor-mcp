@@ -16,6 +16,21 @@ Take UI design screenshots and use them with the composer agent.
 
 Use git diffs to trigger code reviews.
 
+### InitCursor Tool
+Initializes a new project with the cursor-template directory structure. This tool copies the template files from the source directory to a specified destination path.
+
+**Input Parameters:**
+- `destinationPath` (required): Full path where the template should be copied
+
+**Example Usage:**
+```typescript
+const result = await runInitCursorTool({
+  destinationPath: "/path/to/your/project/.cursor"
+});
+```
+
+The tool will create the `.cursor` directory at the specified path and copy all template files and directories into it.
+
 ## 🚀 Getting Started
 
 ### 1. Environment Setup
