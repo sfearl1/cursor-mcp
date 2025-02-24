@@ -40,6 +40,24 @@ async function copyRecursive(src: string, dest: string): Promise<void> {
 }
 
 /**
+ * Ensures the cursor-template exists in the build directory by copying from src if needed
+ */
+async function ensureBuildTemplate(): Promise<string> {
+  const srcTemplateDir = path.join(path.dirname(path.dirname(new URL(import.meta.url).pathname)), '..', 'src', 'cursor-template');
+  const buildTemplateDir = path.join(path.dirname(path.dirname(new URL(import.meta.url).pathname)), 'cursor-template');
+  
+  try {
+    // Check if build template exists
+    await fs.access(buildTemplateDir);
+  } catch {
+    // If build template doesn't exist, copy from src
+    await copyRecursive(srcTemplateDir, buildTemplateDir);
+  }
+  
+  return buildTemplateDir;
+}
+
+/**
  * Initializes the cursor-template directory in a new project
  */
 export async function runInitCursorTool(input: InitCursorToolInput): Promise<ServerResult> {
@@ -47,25 +65,27 @@ export async function runInitCursorTool(input: InitCursorToolInput): Promise<Ser
     // Validate input
     const { destinationPath } = InitCursorToolSchema.parse(input);
     
-    // Get source template directory path
-    const sourceDir = path.resolve(__dirname, '../cursor-template');
+    // Ensure template exists in build directory
+    const buildTemplateDir = await ensureBuildTemplate();
     
-    // Ensure source directory exists
-    await fs.access(sourceDir);
+    // Create the .cursor directory path
+    const destDir = path.join(destinationPath, '.cursor');
     
-    // Copy template files recursively
-    await copyRecursive(sourceDir, destinationPath);
+    // Copy template files recursively from build to destination
+    await copyRecursive(buildTemplateDir, destDir);
     
     return {
       content: [{
         type: 'text',
-        text: `Successfully initialized cursor-template at ${destinationPath}`
+        text: `Successfully initialized cursor-template at ${destDir}`
       }]
     };
   } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Failed to initialize cursor-template: ${error.message}`);
-    }
-    throw error;
+    return {
+      content: [{
+        type: 'text',
+        text: `Failed to initialize cursor-template: ${error instanceof Error ? error.message : 'Unknown error'}`
+      }]
+    };
   }
 } 
