@@ -28,12 +28,11 @@ export async function runScreenshotTool(args) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(finalUrl);
-    const screenshotBuffer = (await page.screenshot({
+    const screenshotBuffer = await page.screenshot({
         fullPage: true,
-    }));
+    });
     await browser.close();
     await fs.writeFile(fullPathToScreenshot, screenshotBuffer);
-    // Return the base64 representation
     return {
         content: [
             {
