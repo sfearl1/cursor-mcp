@@ -21,10 +21,10 @@ export const agentTaskToolDescription =
   "Analyzes a task description and codebase to generate detailed implementation steps.";
 
 export const AgentTaskToolSchema = z.object({
-  task: z.string().describe("Description of the task"),
+  task: z.string().describe("Task description"),
   code: z.array(z.string()).optional().describe("Array of files to analyze"),
   rules: z.array(z.string()).optional().describe("Array of rules to follow"),
-  agent: z.enum(["architect", "designer"]).default("architect").describe("Agent type"),
+  agent: z.enum(["architect", "designer", "engineer"]).default("architect").describe("Agent type"),
 });
 
 type AgentTaskToolInput = z.infer<typeof AgentTaskToolSchema>;

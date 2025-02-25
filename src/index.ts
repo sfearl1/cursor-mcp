@@ -37,7 +37,7 @@ import {
  * A minimal MCP server providing four Cursor Tools:
  *   1) InitCursor
  *   2) Screenshot
- *   3) AgentTask
+ *   3) AgentTask (with architect, designer, and engineer roles)
  *   4) CodeReview
  */
 
@@ -45,7 +45,7 @@ import {
 const server = new Server(
   {
     name: "cursor-tools",
-    version: "2.0.1",
+    version: "2.0.2",
   },
   {
     capabilities: {

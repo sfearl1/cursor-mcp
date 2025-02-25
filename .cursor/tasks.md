@@ -1,47 +1,37 @@
-1. **Analyze Codebase for Path Resolution**
+1. **Update the `AgentType` Enum in `types/template.ts`**
+   - [ ] Locate `types/template.ts` and find the `AgentType` enum definition.
+   - [ ] Add a new enum item called `Engineer` to represent the new role.
+   - **Rationale**: Incorporating the Engineer role in the enumeration allows the system to distinguish this new type of agent.
+   - **Impact**: This change impacts areas of the code that utilize the `AgentType` enum by introducing a new valid option.
 
-   - [x] Use the `read_multiple_files` tool to read `src/paths.ts`, `src/index.ts`, and all relevant JavaScript and TypeScript files in the `src` directory that might deal with imports or require statements to check if path resolution changes have been implemented correctly.
+2. **Create Templates for the Engineer Role**
+   - [ ] Add a new XML file named `engineer.xml` in the directory `src/cursor-template/agent-templates/` for the Engineer role.
+   - [ ] Define the necessary XML structure that outlines the basic template for tasks specific to the Engineer role.
+   - **Rationale**: Templates provide a standardized approach for new tasks implemented by the Engineer role.
+   - **Impact**: This step will create a new file, and its usage needs to be defined in any system configuration or documentation regarding agent templates.
 
-2. **Verify and Update Import Statements**
+3. **Modify the Agent Task Implementation**
+   - [ ] Open `src/tools/agent_task.ts`.
+   - [ ] Within the main function, implement conditional logic to handle task assignments based on the `Engineer` role.
+   - [ ] Ensure that the implementation includes task tracking and the updating of tasks as they are completed.
+   - **Rationale**: Extending the `agent_task.ts` file to support the Engineer role allows the system to process this role's operations effectively.
+   - **Impact**: Coding quality and task tracking by the Engineer will affect task flow and dependencies in other tools like `architect` and `designer`.
 
-   - [x] In file `src/paths.ts`:
-     - Check if paths are defined using absolute or relative paths.
-     - Modify paths to use absolute paths for clearer and more reliable path resolution.
-     - **Rationale:** Absolute paths prevent issues related to relative paths when modules are moved or refactored.
-     - **Impact:** This modification ensures path resolution consistency across the codebase.
+4. **Enhance System Prompts for the Engineer Role**
+   - [ ] Modify or add new system prompts in `src/tools/agent_task.ts` that are specific to interactions with the Engineer role tasks.
+   - [ ] Ensure prompts guide the Engineer through task verification, and code quality checks to avoid redundancy and circular implementations.
+   - **Rationale**: Clear and specific prompts will guide the Engineer in executing tasks accurately and efficiently.
+   - **Impact**: Changes in prompts will directly affect how users interact with the Engineer functionalities and can influence user experience and efficiency of task completion.
 
-   - [x] In all files under `src` that have imports:
-     - Replace all relative path imports with the updated paths from `src/paths.ts`.
-     - For each update, ensure imports are sorted according to the guideline: external → internal → sibling → styles.
-     - **Rationale:** Consistent use of the defined paths in `src/paths.ts` enhances maintenance and readability.
-     - **Impact:** Changes in how paths are defined in `src/paths.ts` can affect imports throughout the project.
+5. **Implement Task Tracking Functionality**
+   - [ ] Create a new function in `src/utils/shared.ts` named `trackTaskProgress`.
+   - [ ] This function should accept task identifiers and status updates, and then log these changes in a `tasks.md` file.
+   - **Rationale**: Tracking task progress is vital for the new Engineer role to manage its workload and completion rate effectively.
+   - **Impact**: Adding this functionality will introduce more IO operations and can affect performance depending on task frequency and system capabilities.
 
-3. **Refactor Code for Path Utilization**
-
-   - [x] In file `src/index.ts`:
-     - Update the file to utilize the new absolute paths for importing necessary modules or components.
-     - Ensure all path-related operations support the use of these new path configurations.
-     - **Rationale:** Ensures that the entry point of the application aligns with path resolution configurations.
-     - **Impact:** Major impact on how the application initializes and loads modules.
-
-4. **Configuration Update in `tsconfig.json`**
-
-   - [x] Modify `tsconfig.json` to include or update the `baseUrl` and `paths` configurations to support absolute paths.
-     - Set `"baseUrl": "./src"`.
-     - Configure paths that reflect the structure of the project for clearer resolution.
-     - **Rationale:** Configuring TypeScript to recognize the base URL and paths helps in simplifying imports and maintaining consistency.
-     - **Impact:** Direct impact on how TypeScript resolves modules, therefore affecting the build process and potentially the runtime module resolution.
-
-5. **Build and Commit**
-
-   - [x] Run a build to ensure all changes compile correctly using command `npm run build`.
-     - **Rationale:** Validates that the changes made do not introduce errors and are compatible with the rest of the codebase.
-     - **Impact:** Confirmation that the application is still functional after the modifications.
-
-   - [x] Document changes in `.cursor/updates.md`:
-     - Add a summary explaining the updates made to path resolution and import structuring.
-     - **Rationale:** Provides documentation for future reference and clarity on what changes were made during this operation.
-
-   - [x] Use `git add . && git commit -m "Refactor path resolution and update import structures for enhanced reliability."`
-     - **Rationale:** Version control update to save the changes made.
-     - **Impact:** Maintains a historical record of the changes and ensures they are tracked in version control.
+6. **Build and Commit Changes**
+   - [ ] Run a build to compile the changes: `npm run build`.
+   - [ ] If the build passes without errors, update the `.cursor/updates.md` with a summary of changes: "Added Engineer role support in Agent Tasks and implemented task tracking."
+   - [ ] Stage and commit all changes: `git add . && git commit -m "Implement Engineer role support and task tracking."`.
+   
+By following this plan, the new Engineer role will be correctly integrated into the system, enhancing the platform's capability to handle more structured and systematic task executions.

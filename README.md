@@ -4,9 +4,17 @@ Welcome to your AI-powered development toolkit, designed as a Model Context Prot
 
 ## ✨ Features
 
-### 🎨 Code Architect
+### 🏗️ Code Architect
 
 Call advanced reasoning LLMs to generate plans and instructions for coding agents.
+
+### 🎨 UI Designer
+
+Generate detailed design tasks with comprehensive UI/UX guidelines.
+
+### 👨‍💻 Engineer
+
+Meticulously implement architect and designer plans with thorough task tracking and high-quality code.
 
 ### 📸 Screenshot Buddy
 
@@ -16,7 +24,7 @@ Take UI design screenshots and use them with the composer agent.
 
 Use git diffs to trigger code reviews.
 
-### InitCursor Tool
+### 🚀 InitCursor Tool
 Initializes a new project with the cursor-template directory structure. This tool copies the template files from the source directory to a specified destination path.
 
 **Input Parameters:**

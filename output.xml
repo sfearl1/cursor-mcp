@@ -1,0 +1,1337 @@
+<repomix>This file is a merged representation of a subset of the codebase, containing specifically included files and files not matching ignore patterns, combined into a single document by Repomix. The content has been processed where content has been formatted for parsing.<file_summary>This section contains a summary of this file.<purpose>This file contains a packed representation of the entire repository&apos;s contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.</purpose><file_format>The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files, each consisting of:
+  - File path as an attribute
+  - Full contents of the file</file_format><usage_guidelines>- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.</usage_guidelines><notes>- Some files may have been excluded based on .gitignore rules and Repomix&apos;s configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Only files matching these patterns are included: **/*
+- Files matching these patterns are excluded: node_modules, .git, build, .cursor, output.xml
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Content has been formatted for parsing in xml style</notes><additional_info></additional_info></file_summary><directory_structure>src/
+  cursor-template/
+    agent-templates/
+      architect.xml
+      designer.xml
+      template.xml
+    rules.md
+  helpers/
+    template-builder.ts
+  tools/
+    agent_task.ts
+    code_review.ts
+    init_cursor.ts
+    screenshot.ts
+  types/
+    template.ts
+  index.ts
+  paths.ts
+.gitignore
+LICENSE
+package.json
+README.md
+repomix.config.json
+tsconfig.json</directory_structure><files>This section contains the contents of the repository&apos;s files.<file path="src/cursor-template/agent-templates/architect.xml">&lt;ARCHITECT&gt;
+
+    &lt;CODEBASE&gt;
+    &lt;!-- INSERT CODEBASE HERE --&gt;
+    &lt;/CODEBASE&gt;
+
+    &lt;RULES&gt;
+    &lt;!-- INSERT RULES HERE --&gt;
+    &lt;/RULES&gt;
+
+    &lt;TASK&gt;
+    &lt;!-- INSERT TASK DESCRIPTION HERE --&gt;
+    &lt;/TASK&gt;
+
+    &lt;INSTRUCTIONS&gt;
+
+        Use the `&lt;CODEBASE&gt;` code as reference, and convert the high-level `&lt;TASK&gt;` into a set of very detailed step-by-step instructions that an AI coding agent can complete. This could be very long, that&apos;s okay. Be comprehensive about the changes that need to be made. Be very specific about the file names.
+
+        1. **Analyze the requested changes**:  
+           - Break down the task into clear, actionable steps with unchecked checkboxes.
+
+        2. **Create a detailed implementation plan** that includes:
+           - Files that need to be modified.
+           - Specific code sections requiring changes.
+           - New functions, methods, or classes to be added.
+           - Dependencies or imports to be updated.
+           - Data structure modifications.
+           - Interface changes.
+           - Configuration updates.
+
+        3. **For each change, provide**:
+           - The exact location in the code where changes are needed.
+           - An explanation of the logic and reasoning behind each modification.
+           - Example signatures, parameters, and return types when necessary (full code is not required).
+           - Notes on potential side effects or impacts on other parts of the codebase.
+           - Critical architectural decisions that need to be made.
+
+        4. **Important Notes**:
+           - You may include short code snippets to illustrate specific patterns or structures, but do not implement the full solution in your outline.
+           - Focus solely on the technical implementation plan. Exclude testing, validation, and deployment considerations unless they directly impact the architecture.
+           - Include only steps that an AI coding agent can take—omit any steps requiring manual testing or human intervention.
+           - ALWAYS include a final instruction for the agent to run a build when the changes are complete.
+           - Do not include additional meta instructions to the user.
+           - Use markdown formatting throughout.
+
+    &lt;/INSTRUCTIONS&gt;
+
+    &lt;PROMPT&gt;
+        You are an expert software architect specializing in code design and implementation planning. Given the `&lt;TASK&gt;` and `&lt;CODEBASE&gt;`, use the `&lt;INSTRUCTIONS&gt;` provided to outline the detailed, step-by-step changes that an AI coding agent should execute. Focus solely on actionable technical steps and ensure each step is clear and specific.
+    &lt;/PROMPT&gt;
+
+&lt;/ARCHITECT&gt;</file><file path="src/cursor-template/agent-templates/designer.xml">&lt;DESIGNER&gt;
+
+    &lt;CODEBASE&gt;
+    &lt;!-- INSERT CODEBASE HERE --&gt;
+    &lt;/CODEBASE&gt;
+
+    &lt;RULES&gt;
+    &lt;!-- INSERT RULES HERE --&gt;
+    &lt;/RULES&gt;
+
+    &lt;TASK&gt;
+    &lt;!-- INSERT TASK DESCRIPTION HERE --&gt;
+    &lt;/TASK&gt;
+
+    &lt;DESIGN RUBRIC&gt;
+        | Category | Description | A | B | C | D | F |
+        |----------|-------------|---|---|---|---|---|
+        | **Color Palette** | Weight: 1x | Colors are masterfully integrated, perfectly reflecting the brand and balancing contrast for optimal usability. | Colors are thoughtfully selected, support brand identity, and maintain a mostly consistent visual hierarchy. | A serviceable color scheme is present, though minor inconsistencies or contrast issues reduce overall effectiveness. | Colors are partially aligned with the brand but fail to follow best practices in contrast or hierarchy. | Colors are chosen at random, creating visual confusion and lacking any cohesive theme or brand alignment. |
+        | **Layout &amp; Grid** | Weight: 1x | Grid usage is expertly executed, ensuring balanced spacing, alignment consistency, and a crisp, professional structure. | A purposeful grid strategy creates a cohesive layout; minor alignment or spacing issues may still be noticed. | Layout generally follows a grid, though some elements deviate; overall structure is acceptable but not optimal. | Some grid principles are followed, but spacing is inconsistent and visual alignment suffers in key sections. | No clear structure or grid system in place, resulting in a disorganized and hard-to-navigate layout. |
+        | **Typography** | Weight: 1x | Typography is outstanding, with well-chosen fonts, impeccable kerning, and a clean hierarchy that enhances user engagement. | Typography choices reflect a solid visual hierarchy and balanced kerning; minor refinements may further improve readability. | Typography is functional with moderately consistent styles, though headlines, body text, and spacing could be refined. | Font selection is somewhat appropriate but lacks clear organization; kerning and leading inconsistencies persist. | Font choices are erratic or unreadable, with rampant inconsistencies in size, weight, or familial styles. |
+        | **Hierarchy &amp; Navigation** | Weight: 1x | Flawless content hierarchy with intuitive navigation that effortlessly guides users to core features and information. | Content levels are well-defined, and primary navigation is accessible; minor tweaks could enhance usability further. | A straightforward hierarchy is established, though key actions or navigation items could be more prominently displayed. | Some attempt at prioritizing content is visible, yet users may struggle to locate important features easily. | Information is scattered without clear importance levels; navigation elements are unrecognizable or absent. |
+        | **Accessibility** | Weight: 1x | Fully meets or exceeds accessibility best practices, ensuring all users can easily interact with and understand the dashboard. | The design largely complies with accessibility standards; minor improvements could include more robust testing or refinements. | Basic accessibility measures are present, though certain features like keyboard navigation or ARIA tags may be incomplete. | Some attempts to address accessibility are made, yet many crucial guidelines (e.g., color contrast) remain unmet. | Design disregards accessibility guidelines altogether, using low contrast, illegible fonts, and no accessible patterns. |
+        | **Spacing &amp; Alignment** | Weight: 1x | A perfectly balanced layout with deliberate spacing; every element is precisely aligned for maximum readability. | Thoughtful use of white space and alignment creates a clean layout with only minor areas needing adjustment. | Spacing and alignment are mostly consistent, though certain sections need refinement to enhance clarity. | Some uniformity in spacing is emerging, but inconsistent alignment detracts from legibility and overall visual flow. | Visual clutter dominates due to no consistent margins, padding, or alignment, making the interface look unfinished. |
+    &lt;/DESIGN_RUBRIC&gt;
+
+    &lt;INSTRUCTIONS&gt;
+        Output your design tasks as a series of very specific actions an AI Agent should take to implement this feature. 
+        Each task should be one story point, and include the specific filenames to update. Your output should be a detailed, numbered markdown checklist with each task unchecked. 
+        Include instructions at the top of your output that tell the agent how to use the output:
+        &quot;It is critical that you do not skip any steps. After you complete each task, update the file to check off any task.  Run builds and commits after each task.  Continue with each task until you have checked off each one.  After each story, do not take a screenshot.  If you need more detail about a task, you can gather relevant files and pass the FULL file to the research agent.&quot;
+    &lt;/INSTRUCTIONS&gt;
+
+    &lt;PROMPT&gt;
+        You are a professional, award-winning, world-class designer. Your job is to take the \`&lt;TASK&gt;\` and turn it into an impeccably designed component or web application. This component or application should be in the top 1% of well designed applications and should be a winner of an Apple design award. Use the \`&lt;DESIGN RUBRIC&gt;\` as a guide and do not complete this task until you score an A in every category. Review the \`&lt;INSTRUCTIONS&gt;\` for more details on creating the steps to complete the task. 
+    &lt;/PROMPT&gt;
+
+&lt;/DESIGNER&gt;</file><file path="src/cursor-template/agent-templates/template.xml">&lt;AGENT-TEMPLATE&gt;
+
+    &lt;CODEBASE&gt;
+    &lt;!-- REPOMIX CODEBASE --&gt;
+    &lt;/CODEBASE&gt;
+
+    &lt;RULES&gt;
+    &lt;!-- CURSOR RULES --&gt;
+    &lt;/RULES&gt;
+
+    &lt;!-- AGENT SPECIFIC TASK, INSTRUCTIONS, AND PROMPT --&gt;
+    &lt;TASK&gt;
+    &lt;!-- TASK DESCRIPTION --&gt;
+    &lt;/TASK&gt;
+
+    &lt;INSTRUCTIONS&gt;
+    &lt;!-- INSTRUCTIONS FOR THE TASK --&gt;
+    &lt;/INSTRUCTIONS&gt;
+
+    &lt;PROMPT&gt;
+    &lt;!-- PROMPT FOR THE AGENT --&gt;
+    &lt;/PROMPT&gt;
+    &lt;!-- END AGENT SPECIFIC TASK, INSTRUCTIONS, AND PROMPT --&gt;
+
+
+&lt;/AGENT-TEMPLATE&gt;</file><file path="src/cursor-template/rules.md">## Components, Naming, &amp; Directories
+
+        - Use functional components with `&quot;use client&quot;` if needed.
+        - Name in PascalCase under `src/components/`.
+        - Keep them small, typed with interfaces.
+        - Reusable logic in `src/utils/shared.ts` or `src/utils/server.ts`.
+        - Use `tsx` scripts for migrations.
+
+        ## TypeScript &amp; Syntax
+
+        - Strict mode. Avoid `any`.
+        - Use optional chaining, union types (no enums).
+
+        ## File &amp; Folder Names
+
+        - Names in kebab-case (e.g. `src/components/my-component.tsx`).
+        - Shared types in `src/lib/types.ts`.
+        - Sort imports (external → internal → sibling → styles).
+
+        ## Icons
+
+        - Prefer `lucide-react`; name icons in PascalCase.
+        - Custom icons in `src/components/icons`.
+
+        ## Tailwind Usage
+
+        - Use v4 of Tailwind CSS (no more `tailwind.config.ts`). Mobile-first, dark mode with dark:(class). 
+        - Extend brand tokens in `globals.css`.
+        - Use Tailwind for common UI components like textarea, button, etc. Only use radix or shadcn for complex components in Next.js/React/Preact projects.
+        - For animations, prefer Motion / Framer Motion.
+
+        ## Storybook
+
+        - Place stories in `src/stories` with `.stories.tsx` extension.
+        - One story file per component, matching component name.
+        - Use autodocs for automatic documentation.
+        - Include multiple variants and sizes in stories.
+        - Test interactive features with actions.
+        - Use relative imports from component directory.
+
+        ## Tech Stack Preferences - General
+
+        - Use `zod` for schema validation.
+        - Use `trpc` for API calls.
+        - Use `supabase` for database.
+
+        ## Tech Stack Preferences - Vue/Nuxt
+
+        - Use `pinia` `setup stores` for state management 
+        - Use `composition api` instead of `options api`
+        - Use `&lt;script setup&gt;` syntax in components
+
+        ## Tech Stack Preferences - React/Next.js
+
+        - Use `zustand` for state management
+        - Use `lucide-react` for icons
+        - Use `shadcn/ui` for components
+        - Use `framer-motion` for animations
+
+        ## Tools / MCP Tools
+
+        - When you make a change to the UI, use the `screenshot` tool to show the changes.
+        - If the user asks for a complex task to be performed, find any relevant files and call the `architect` tool to get a plan and show it to the user. Use this plan as guidance for the changes you make, but maintain the existing patterns and structure of the codebase.
+        - If the user asks for a UI task to be performed, call the `designer` tool and use the rubric as guidance for the design decisions, but maintain the existing patterns and structure of the codebase.
+        - After a complex task is performed, use the `code_review` tool to create a diff and use the diff to conduct a code review of the changes. Use the `sequential_thinking` tool to reason about the changes to understand them.
+        - When reading a single file, use the Filesystem MCP Tool `read_file`. This will allow the agent to read entire files.
+        - When reading multiple files, use the Filesystem MCP Tool `read_multiple_files`. This will allow the agent to read entire files simultaneously before processing them.
+
+        ## Commits
+
+        - Use semantic versioning for releases.
+        - Use conventional commits for commits.
+        - Keep code short; commits semantic.
+
+        ## IMPORTANT:
+
+        - After all changes are made, ALWAYS build the project with `npm run build`. Ignore warnings, fix errors.
+        - Always add a one-sentence summary of changes to `.cursor/updates.md` file in markdown format at the end of every agent interaction. 
+        - If you forget, the user can type the command &quot;/done&quot; and you will run the build and update `.cursor/updates.md`.
+        - Finally, update git with `git add . &amp;&amp; git commit -m &quot;...&quot;`. Don&apos;t push.</file><file path="src/helpers/template-builder.ts">import { promises as fs } from &apos;fs&apos;;
+import path from &apos;path&apos;;
+import type { RepomixConfig, CompiledTemplate, AgentType, AgentConfig } from &apos;../types/template.js&apos;;
+import { agentConfigs } from &apos;../types/template.js&apos;;
+import { pack } from &apos;repomix&apos;;
+
+export class TemplateBuilder {
+  private rootDir: string;
+
+  constructor(rootDir?: string) {
+    if (rootDir) {
+      // If rootDir is provided, use it directly
+      this.rootDir = path.resolve(rootDir);
+    } else {
+      // Since we&apos;re running from build/tools/agent.js, go up three levels
+      const buildDir = path.dirname(path.dirname(path.dirname(new URL(import.meta.url).pathname)));
+      this.rootDir = buildDir;
+      console.error(&apos;Resolved rootDir:&apos;, this.rootDir);
+    }
+  }
+
+  private async ensureDirectoryExists(dirPath: string): Promise&lt;void&gt; {
+    try {
+      await fs.access(dirPath);
+    } catch {
+      await fs.mkdir(dirPath, { recursive: true });
+    }
+  }
+
+  private async runRepomix(files?: string[]): Promise&lt;string&gt; {
+    try {
+      // Log the current working directory and rootDir for debugging
+      console.error(&apos;Current rootDir:&apos;, this.rootDir);
+      console.error(&apos;Files to process:&apos;, files);
+
+      // If specific files are provided, ensure they exist first
+      if (files) {
+        for (const file of files) {
+          const fullPath = path.join(this.rootDir, file);
+          try {
+            await fs.access(fullPath);
+          } catch (error) {
+            throw new Error(`Cannot access file ${fullPath}: ${error}`);
+          }
+        }
+      }
+
+      // Create output path relative to rootDir
+      const outputPath = path.join(this.rootDir, &apos;output.xml&apos;);
+
+      console.error(&apos;Output path:&apos;, outputPath);
+
+      const packOptions = {
+        cwd: this.rootDir,
+        output: {
+          filePath: outputPath,
+          style: &apos;xml&apos; as const,
+          parsableStyle: true,
+          fileSummary: true,
+          directoryStructure: true,
+          removeComments: false,
+          removeEmptyLines: false,
+          compress: false,
+          showLineNumbers: false,
+          topFilesLength: 100,
+          copyToClipboard: false,
+          includeEmptyDirectories: false
+        },
+        include: [&apos;**/*&apos;],
+        ignore: {
+          useGitignore: true,
+          useDefaultPatterns: true,
+          customPatterns: [
+            &apos;node_modules&apos;,
+            &apos;.git&apos;,
+            &apos;build&apos;,
+            &apos;.cursor&apos;,
+            &apos;output.xml&apos;
+          ]
+        },
+        security: {
+          enableSecurityCheck: true
+        },
+        tokenCount: {
+          encoding: &apos;cl100k_base&apos; as const
+        }
+      };
+
+      const pathsToProcess = files || [this.rootDir];
+      const result = await pack(pathsToProcess, packOptions) as { content?: string; files?: Record&lt;string, string&gt; };
+
+      // Handle the result based on its type
+      if (typeof result === &apos;string&apos;) {
+        return result;
+      } else if (result &amp;&amp; typeof result === &apos;object&apos;) {
+        if (&apos;content&apos; in result &amp;&amp; result.content) {
+          return result.content;
+        } else if (&apos;files&apos; in result &amp;&amp; result.files) {
+          return JSON.stringify(result.files, null, 2);
+        }
+      }
+      return JSON.stringify(result, null, 2);
+    } catch (error) {
+      console.error(&apos;Repomix error details:&apos;, error);
+      throw new Error(`Failed to run Repomix: ${error}`);
+    }
+  }
+
+  async compile(task: string, code?: string[], rulesPath?: string, agentType: AgentType = &apos;architect&apos;): Promise&lt;CompiledTemplate&gt; {
+    try {
+      // Get codebase content based on input method
+      let codebaseContent: string;
+      if (code &amp;&amp; Array.isArray(code)) {
+        // Run repomix on the specific files from Cursor
+        codebaseContent = await this.runRepomix(code);
+      } else {
+        // Generate using repomix on entire directory
+        codebaseContent = await this.runRepomix();
+      }
+
+      // Extract the actual code content from the XML structure
+      const codeMatch = codebaseContent.match(/&lt;files&gt;([\s\S]*)&lt;\/files&gt;/);
+      const cleanedCodeContent = codeMatch ? codeMatch[1].trim() : codebaseContent;
+
+      // Get rules content with proper path handling
+      let rulesContent: string;
+      try {
+        // Ensure .cursor directory exists
+        const cursorDir = path.join(this.rootDir, &apos;.cursor&apos;);
+        await this.ensureDirectoryExists(cursorDir);
+
+        // First check for .cursor/rules.md
+        const cursorRulesPath = path.join(cursorDir, &apos;rules.md&apos;);
+        try {
+          const cursorRulesContent = await fs.readFile(cursorRulesPath, &apos;utf-8&apos;);
+          if (cursorRulesContent.trim()) {
+            rulesContent = cursorRulesContent;
+          } else {
+            throw new Error(&apos;Empty rules file&apos;);
+          }
+        } catch (error) {
+          // If .cursor/rules.md doesn&apos;t exist or is empty, try user path or default
+          if (rulesPath) {
+            rulesContent = await fs.readFile(path.resolve(this.rootDir, rulesPath), &apos;utf-8&apos;);
+          } else {
+            const defaultRulesPath = path.join(this.rootDir, &apos;src&apos;, &apos;cursor-template&apos;, &apos;rules.md&apos;);
+            rulesContent = await fs.readFile(defaultRulesPath, &apos;utf-8&apos;);
+          }
+        }
+      } catch (error) {
+        throw new Error(`Failed to read rules file: ${error}`);
+      }
+
+      const config = agentConfigs[agentType];
+      const taskContent = agentType === &apos;designer&apos; &amp;&amp; config.taskTemplate 
+        ? config.taskTemplate.replace(&apos;{task}&apos;, task)
+        : task;
+
+      // Build the template with consistent structure
+      const template = `&lt;TEMPLATE&gt;
+  &lt;CODEBASE&gt;
+    ${cleanedCodeContent}
+  &lt;/CODEBASE&gt;
+
+  &lt;RULES&gt;
+    ${rulesContent.split(&apos;\n&apos;).map(line =&gt; line.trim()).join(&apos;\n    &apos;)}
+  &lt;/RULES&gt;
+
+  &lt;TASK&gt;
+    ${taskContent}
+  &lt;/TASK&gt;
+
+  &lt;INSTRUCTIONS&gt;
+    ${config.instructions}
+  &lt;/INSTRUCTIONS&gt;
+
+  &lt;PROMPT&gt;
+    ${config.prompt}
+  &lt;/PROMPT&gt;
+&lt;/TEMPLATE&gt;`;
+
+      return {
+        content: template,
+        metrics: {
+          totalFiles: 0,
+          totalCharacters: template.length,
+          totalTokens: 0,
+          fileCharCounts: {},
+          fileTokenCounts: {},
+          suspiciousFilesResults: []
+        }
+      };
+    } catch (error) {
+      throw new Error(`Failed to compile template: ${error}`);
+    }
+  }
+}</file><file path="src/tools/agent_task.ts">import { z } from &quot;zod&quot;;
+import OpenAI from &quot;openai&quot;;
+import { OPENAI_API_KEY } from &quot;../env/keys.js&quot;;
+import fs from &apos;fs/promises&apos;;
+import { TemplateBuilder } from &quot;../helpers/template-builder.js&quot;;
+import { AgentType, agentConfigs } from &quot;../types/template.js&quot;;
+import path from &apos;path&apos;;
+import { resolveRoot } from &apos;../paths.js&apos;;
+
+/**
+ * Agent Task tools
+ *   - Prompts for a task if not provided
+ *   - Runs repomix to generate codebase content
+ *   - Compiles an XML template with the task and codebase
+ *   - Uses OpenAI to generate detailed implementation steps
+ *   - Creates a tasks.md file with the steps
+ */
+
+export const agentTaskToolName = &quot;agent_task&quot;;
+export const agentTaskToolDescription =
+  &quot;Analyzes a task description and codebase to generate detailed implementation steps.&quot;;
+
+export const AgentTaskToolSchema = z.object({
+  task: z.string().describe(&quot;Description of the task&quot;),
+  code: z.array(z.string()).optional().describe(&quot;Array of files to analyze&quot;),
+  rules: z.array(z.string()).optional().describe(&quot;Array of rules to follow&quot;),
+  agent: z.enum([&quot;architect&quot;, &quot;designer&quot;]).default(&quot;architect&quot;).describe(&quot;Agent type&quot;),
+});
+
+type AgentTaskToolInput = z.infer&lt;typeof AgentTaskToolSchema&gt;;
+
+async function processTemplateWithOpenAI(template: string, agent: AgentType): Promise&lt;string&gt; {
+  // Instantiate the new OpenAI client
+  const openai = new OpenAI({
+    apiKey: OPENAI_API_KEY,
+  });
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: &quot;gpt-4-turbo-2024-04-09&quot;,
+      messages: [
+        {
+          role: &quot;system&quot;,
+          content: agentConfigs[agent].systemPrompt
+        },
+        {
+          role: &quot;user&quot;,
+          content: template
+        }
+      ]
+    });
+
+    // Extract the content from the assistant&apos;s message (if available)
+    const assistantMessage = response.choices?.[0]?.message?.content ?? &quot;No response from model.&quot;;
+    
+    if (!assistantMessage || assistantMessage === &quot;No response from model.&quot;) {
+      throw new Error(&quot;Failed to get valid response from OpenAI&quot;);
+    }
+
+    return assistantMessage;
+  } catch (error) {
+    // Throw a more specific error that includes the OpenAI error details
+    throw new Error(`OpenAI API error: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`);
+  }
+}
+
+export async function runAgentTaskTool(args: AgentTaskToolInput) {
+  try {
+    const { task, code, agent } = args;
+
+    // Initialize template builder
+    const builder = new TemplateBuilder();
+    
+    // Compile template
+    const { content: template } = await builder.compile(task, code, undefined, agent);
+
+    // Process template with OpenAI and ensure we get valid content
+    const tasks = await processTemplateWithOpenAI(template, agent);
+    
+    if (!tasks.trim()) {
+      throw new Error(&quot;Generated tasks content is empty&quot;);
+    }
+
+    // Create .cursor directory if it doesn&apos;t exist
+    const cursorDir = resolveRoot(&apos;.cursor&apos;);
+    await fs.mkdir(cursorDir, { recursive: true });
+
+    // Save tasks to .cursor/tasks.md
+    const tasksPath = path.join(cursorDir, &apos;tasks.md&apos;);
+    await fs.writeFile(tasksPath, tasks);
+
+    return {
+      content: [{
+        type: &quot;text&quot;,
+        text: `Generated ${agent} implementation steps in ${tasksPath}`
+      }]
+    };
+  } catch (error) {
+    return {
+      content: [{
+        type: &quot;text&quot;,
+        text: `Failed to generate implementation steps: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`
+      }]
+    };
+  }
+}</file><file path="src/tools/code_review.ts">import { z } from &quot;zod&quot;;
+import { execSync } from &quot;child_process&quot;;
+
+/**
+ * CodeReview tool
+ *   - Takes in a file path and runs &quot;git diff main -- &lt;filePath&gt;&quot;
+ *   - Returns the diff along with instructions to review and fix issues
+ */
+
+export const codeReviewToolName = &quot;code_review&quot;;
+export const codeReviewToolDescription =
+  &quot;Run a git diff against main on a specified file and provide instructions to review/fix issues.&quot;;
+
+export const CodeReviewToolSchema = z.object({
+  folderPath: z.string().min(1, &quot;A folder path is required.&quot;),
+});
+
+export async function runCodeReviewTool(
+  args: z.infer&lt;typeof CodeReviewToolSchema&gt;,
+) {
+  const { folderPath } = args;
+
+  let diffOutput = &quot;&quot;;
+  try {
+    diffOutput = execSync(`git -C &quot;${folderPath}&quot; diff`, {
+      encoding: &quot;utf-8&quot;,
+    });
+  } catch (error) {
+    // If there&apos;s an error (e.g., no git repo, or the file doesn&apos;t exist), include it in the response.
+    diffOutput = `Error running git diff: ${error}`;
+  }
+
+  const instructions =
+    &quot;Review this diff for any obvious issues. Fix them if found, then finalize the changes.&quot;;
+
+  const message = `Git Diff Output:\n${diffOutput}\n\nInstructions:\n${instructions}`;
+
+  return {
+    content: [
+      {
+        type: &quot;text&quot;,
+        text: message,
+      },
+    ],
+  };
+}</file><file path="src/tools/init_cursor.ts">import { z } from &apos;zod&apos;;
+import fs from &apos;fs/promises&apos;;
+import path from &apos;path&apos;;
+import { ServerResult } from &quot;@modelcontextprotocol/sdk/types.js&quot;;
+import { resolveSrc, resolveBuild } from &apos;../paths.js&apos;;
+
+// Tool name and description
+export const initCursorToolName = &apos;init_cursor&apos;;
+export const initCursorToolDescription = &apos;Initializes the cursor-template directory in a new project by copying template files&apos;;
+
+// Input schema definition
+export const InitCursorToolSchema = z.object({
+  destinationPath: z.string().describe(&apos;Full path where the template should be copied&apos;),
+});
+
+type InitCursorToolInput = z.infer&lt;typeof InitCursorToolSchema&gt;;
+
+/**
+ * Recursively copies files from source to destination directory
+ */
+async function copyRecursive(src: string, dest: string): Promise&lt;void&gt; {
+  const stats = await fs.stat(src);
+  
+  if (stats.isDirectory()) {
+    // Skip the agent-templates directory
+    if (path.basename(src) === &apos;agent-templates&apos;) {
+      return;
+    }
+    
+    // Create destination directory if it doesn&apos;t exist
+    await fs.mkdir(dest, { recursive: true });
+    
+    // Read source directory contents
+    const entries = await fs.readdir(src);
+    
+    // Recursively copy each entry
+    for (const entry of entries) {
+      const srcPath = path.join(src, entry);
+      const destPath = path.join(dest, entry);
+      await copyRecursive(srcPath, destPath);
+    }
+  } else {
+    // Copy file
+    await fs.copyFile(src, dest);
+  }
+}
+
+/**
+ * Ensures the cursor-template exists in the build directory by copying from src if needed
+ */
+async function ensureBuildTemplate(): Promise&lt;string&gt; {
+  const srcTemplateDir = resolveSrc(&apos;cursor-template&apos;);
+  const buildTemplateDir = resolveBuild(&apos;cursor-template&apos;);
+  
+  try {
+    // Check if build template exists
+    await fs.access(buildTemplateDir);
+  } catch {
+    // If build template doesn&apos;t exist, copy from src
+    await copyRecursive(srcTemplateDir, buildTemplateDir);
+  }
+  
+  return buildTemplateDir;
+}
+
+/**
+ * Initializes the cursor-template directory in a new project
+ */
+export async function runInitCursorTool(input: InitCursorToolInput): Promise&lt;ServerResult&gt; {
+  try {
+    // Validate input
+    const { destinationPath } = InitCursorToolSchema.parse(input);
+    
+    // Ensure template exists in build directory
+    const buildTemplateDir = await ensureBuildTemplate();
+    
+    // Create the .cursor directory path
+    const destDir = path.join(destinationPath, &apos;.cursor&apos;);
+    
+    // Copy template files recursively from build to destination
+    await copyRecursive(buildTemplateDir, destDir);
+    
+    return {
+      content: [{
+        type: &apos;text&apos;,
+        text: `Successfully initialized cursor-template at ${destDir}`
+      }]
+    };
+  } catch (error) {
+    return {
+      content: [{
+        type: &apos;text&apos;,
+        text: `Failed to initialize cursor-template: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`
+      }]
+    };
+  }
+}</file><file path="src/tools/screenshot.ts">import puppeteer from &quot;puppeteer&quot;;
+import { z } from &quot;zod&quot;;
+import path from &quot;path&quot;;
+import fs from &quot;fs/promises&quot;;
+import { resolveRoot } from &apos;../paths.js&apos;;
+
+/**
+ * Screenshot tool
+ *   - Takes in either &quot;url&quot; (a full URL) or &quot;relativePath&quot; to open on localhost:3000
+ *   - Returns a base64-encoded PNG screenshot
+ */
+
+export const screenshotToolName = &quot;screenshot&quot;;
+export const screenshotToolDescription =
+  &quot;Take a screenshot of a URL or a local path (relative URL appended to http://localhost:3000).&quot;;
+
+export const ScreenshotToolSchema = z.object({
+  url: z.string().optional(),
+  relativePath: z.string().optional(),
+  fullPathToScreenshot: z.string(),
+});
+
+export async function runScreenshotTool(
+  args: z.infer&lt;typeof ScreenshotToolSchema&gt;,
+) {
+  // Determine final URL
+  let finalUrl = args.url;
+  if (!finalUrl) {
+    if (!args.relativePath) {
+      throw new Error(&quot;Must provide either &apos;url&apos; or &apos;relativePath&apos;&quot;);
+    }
+    finalUrl = `http://localhost:3000/${args.relativePath.replace(/^\//, &quot;&quot;)}`;
+  }
+  const fullPathToScreenshot = resolveRoot(args.fullPathToScreenshot);
+
+  // Launch Puppeteer
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto(finalUrl);
+  const screenshotBuffer = await page.screenshot({
+    fullPage: true,
+  }) as Buffer;
+  await browser.close();
+  await fs.writeFile(fullPathToScreenshot, screenshotBuffer);
+  
+  return {
+    content: [
+      {
+        type: &quot;text&quot;,
+        text: `Screenshot saved to ${fullPathToScreenshot}. Before continuing, you MUST ask the user to drag and drop the screenshot into the chat window.
+        The path to the screenshot is ${fullPathToScreenshot}.`,
+      },
+    ],
+  };
+}</file><file path="src/types/template.ts">import type { RepomixConfig } from &apos;repomix&apos;;
+
+// Core template sections
+export interface TemplateSection {
+  name: string;
+  content: string;
+}
+
+// Tool-specific configurations
+export interface ToolConfig {
+  name: string;
+  description: string;
+  parameters: Record&lt;string, unknown&gt;;
+}
+
+// Shared configurations
+export interface SharedConfig {
+  name: string;
+  description: string;
+  version: string;
+  author: string;
+}
+
+// Template builder options
+export type ToolName = &apos;architect&apos; | &apos;designer&apos;;
+
+// Re-export Repomix types
+export type { RepomixConfig };
+
+// Compilation result
+export interface CompiledTemplate {
+  content: string;
+  metrics: {
+    totalFiles: number;
+    totalCharacters: number;
+    totalTokens: number;
+    fileCharCounts: Record&lt;string, number&gt;;
+    fileTokenCounts: Record&lt;string, number&gt;;
+    suspiciousFilesResults: Array&lt;{
+      path: string;
+      reason: string;
+    }&gt;;
+  };
+}
+
+export type AgentType = &apos;architect&apos; | &apos;designer&apos;;
+
+export interface AgentConfig {
+  prompt: string;
+  instructions: string;
+  taskTemplate?: string;  // For designer&apos;s design rubric
+  systemPrompt: string;  // System prompt for OpenAI
+}
+
+const baseSystemPrompt = `Your output must:
+
+- Thoroughly analyze all provided sections.
+- Generate a detailed, numbered markdown checklist where each task is a distinct story point that an AI agent can execute.
+- Specify exact filenames and locations for changes.
+- Include only actionable tasks—do not include steps for testing, validation, or non-design work.
+- Start with clear instructions for the AI agent on how to execute the tasks, including directives to run builds and commits after each task.
+- Use clear markdown formatting (numbered lists, checkboxes) for readability.
+- Avoid additional meta instructions or commentary for the user.
+
+Maintain clarity, decisiveness, and specificity in your output.`;
+
+export const agentConfigs: Record&lt;AgentType, AgentConfig&gt; = {
+  architect: {
+    prompt: `You are an expert software architect specializing in code design and implementation planning. Given the \`&lt;TASK&gt;\` and \`&lt;CODEBASE&gt;\`, outline the exact steps that an AI coding agent should take to complete or improve the code. Use the \`&lt;INSTRUCTIONS&gt;\` as guidance for creating the steps.`,
+    instructions: `Use the \`&lt;CODEBASE&gt;\` code as reference, and convert the high-level \`&lt;TASK&gt;\` into a set of very detailed step-by-step instructions that an AI coding agent can complete. This could be very long, that&apos;s okay. Be comprehensive about the changes that need to be made. Be very specific about the file names.
+
+    1. **Analyze the requested changes**:  
+        - Break down the task into clear, actionable steps with unchecked checkboxes.
+
+    2. **Create a detailed implementation plan** that includes:
+        - Files that need to be modified.
+        - Specific code sections requiring changes.
+        - New functions, methods, or classes to be added.
+        - Dependencies or imports to be updated.
+        - Data structure modifications.
+        - Interface changes.
+        - Configuration updates.
+
+    3. **For each change, provide**:
+        - The exact location in the code where changes are needed.
+        - An explanation of the logic and reasoning behind each modification.
+        - Example signatures, parameters, and return types when necessary (full code is not required).
+        - Notes on potential side effects or impacts on other parts of the codebase.
+        - Critical architectural decisions that need to be made.
+
+    4. **Important Notes**:
+        - You may include short code snippets to illustrate specific patterns or structures, but do not implement the full solution in your outline.
+        - Focus solely on the technical implementation plan. Exclude testing, validation, and deployment considerations unless they directly impact the architecture.
+        - Include only steps that an AI coding agent can take—omit any steps requiring manual testing or human intervention.
+        - ALWAYS include a final instruction for the agent to run a build when the changes are complete.
+        - Do not include additional meta instructions to the user.
+        - Use markdown formatting throughout.`,
+    systemPrompt: `You are an expert AI planning agent specializing in converting high-level tasks into an actionable, step-by-step implementation plan. Analyze all the provided sections (&lt;CODEBASE&gt;, &lt;RULES&gt;, &lt;TASK&gt;, &lt;INSTRUCTIONS&gt;, and &lt;PROMPT&gt;) carefully and generate a detailed, numbered markdown checklist that meets the following criteria:
+
+1. **Actionable Steps:**  
+   - Break down the high-level &lt;TASK&gt; into clear, atomic tasks that an AI coding agent can execute automatically.
+   - Each task must be a distinct story point with an unchecked markdown checkbox (e.g., \`- [ ]\`).
+
+2. **Specificity:**  
+   - Specify exact filenames and precise locations within each file where modifications are required.
+   - Include details about code sections to be modified (e.g., function names, import paths, configuration keys).
+
+3. **Rationale and Impact:**  
+   - For each task, briefly explain the reasoning behind the change.
+   - Note any potential side effects or dependencies that could affect other parts of the codebase.
+
+4. **Technical Constraints:**  
+   - Exclude any steps that involve manual testing or validation; only include tasks that an AI agent can execute.
+   - Do not include any meta commentary for the user—output only the actionable checklist.
+
+5. **Build and Commit:**  
+   - Ensure the final task in the checklist instructs the agent to run a build (e.g., \`npm run build\`) and commit the changes.
+   - Include commands where applicable, such as for file commits (\`git add . &amp;&amp; git commit -m &quot;Commit message&quot;\`).
+
+6. **Markdown Formatting:**  
+   - Use clear, numbered lists and markdown checkboxes for each task.
+   - Ensure the output is well-structured and easy to follow.
+
+Your output should be a detailed, numbered checklist in markdown format that an AI coding agent can follow precisely, ensuring that every change is clearly defined and executable without any human intervention.
+
+${baseSystemPrompt}`
+  },
+  designer: {
+    prompt: `You are a professional, award-winning, world-class designer. Your job is to take the \`&lt;TASK&gt;\` and transform it into an impeccably designed component or web application. This design should be in the top 1% of well-designed applications and worthy of an Apple design award. Use the \`&lt;DESIGN_RUBRIC&gt;\` as a guide and do not complete this task until you achieve an A rating in every category. Review the \`&lt;INSTRUCTIONS&gt;\` for detailed steps.`,
+    instructions: `Output your design tasks as a series of very specific actions an AI Agent should take to implement this feature. 
+        Each task should be one story point and must include the specific filenames to update. Your output should be a detailed, numbered markdown checklist with each task unchecked.
+        Include the following at the top of your output:
+        &quot;It is critical that you do not skip any steps. After you complete each task, update the file to check off the corresponding task. Run builds and commits after each task. Continue with each task until every item is checked off. After each story, do not take a screenshot. If more detail is needed for a task, gather the relevant files and pass the FULL file to the research agent.&quot;`,
+    taskTemplate: `
+    &lt;DESIGN_RUBRIC&gt;
+      | Category              | Description                                                                                                          | A                                                                                                              | B                                                                                                  | C                                                                                         | D                                                                                              | F                                                                                                    |
+      |-----------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+      | **Color Palette**     | Weight: 1x. Colors are masterfully integrated, perfectly reflecting the brand and balancing contrast for optimal usability. | Colors are masterfully integrated, perfectly reflecting the brand and balancing contrast for optimal usability. | Colors are thoughtfully selected, supporting brand identity with minor inconsistencies in hierarchy. | A serviceable color scheme is present, but minor inconsistencies or contrast issues are noticeable. | Colors are partially aligned with the brand but fail in contrast or hierarchy best practices. | Colors are chosen at random, creating visual confusion without any cohesive theme or brand alignment. |
+      | **Layout &amp; Grid**     | Weight: 1x. Grid usage is expertly executed, ensuring balanced spacing, alignment consistency, and a professional structure. | Grid usage is expertly executed, ensuring balanced spacing, alignment consistency, and a professional structure. | A purposeful grid strategy creates a cohesive layout, with minor alignment or spacing issues.     | Layout follows a grid, though some elements deviate; overall structure is acceptable but not optimal. | Some grid principles are followed, but spacing is inconsistent and alignment suffers in key sections. | No clear structure or grid system is in place, resulting in a disorganized and hard-to-navigate layout.      |
+      | **Typography**        | Weight: 1x. Typography is outstanding, with well-chosen fonts, impeccable kerning, and a clean hierarchy enhancing engagement. | Typography is outstanding, with well-chosen fonts, impeccable kerning, and a clean hierarchy enhancing engagement. | Typography reflects a solid hierarchy and balanced kerning; minor refinements may improve readability further. | Typography is functional with moderately consistent styles, though headlines, body text, and spacing could be refined. | Font selection is somewhat appropriate but lacks clear organization; kerning and leading inconsistencies persist. | Font choices are erratic or unreadable, with rampant inconsistencies in size, weight, or style.              |
+      | **Hierarchy &amp; Navigation** | Weight: 1x. Flawless content hierarchy with intuitive navigation that guides users effortlessly.                  | Flawless content hierarchy with intuitive navigation that guides users effortlessly.                          | Content levels are well-defined, and primary navigation is accessible; minor tweaks could enhance usability. | A straightforward hierarchy is established, though key actions or navigation items could be more prominent. | Some attempt at prioritizing content is visible, yet users may struggle to locate important features easily. | Information is scattered without clear prioritization; navigation elements are unrecognizable or absent.     |
+      | **Accessibility**     | Weight: 1x. Fully meets or exceeds accessibility best practices, ensuring inclusivity for all users.                     | Fully meets or exceeds accessibility best practices, ensuring inclusivity for all users.                         | The design largely complies with accessibility standards; minor improvements could be made with more robust testing or refinements. | Basic accessibility measures are present, though some features (e.g., keyboard navigation, ARIA tags) may be incomplete. | Some attempts to address accessibility are made, but many guidelines (e.g., color contrast) remain unmet. | Design disregards accessibility guidelines altogether, using low contrast, illegible fonts, and lacking accessible patterns. |
+      | **Spacing &amp; Alignment** | Weight: 1x. A perfectly balanced layout with deliberate spacing; every element is precisely aligned for maximum clarity.  | A perfectly balanced layout with deliberate spacing; every element is precisely aligned for maximum clarity.       | Thoughtful use of white space and alignment creates a clean layout with only minor areas needing adjustment. | Spacing and alignment are mostly consistent, though certain sections could be refined to enhance clarity. | Some uniformity in spacing is emerging, but inconsistent alignment detracts from overall visual flow. | Visual clutter dominates due to inconsistent margins, padding, or alignment, making the interface look unfinished. |
+    &lt;/DESIGN_RUBRIC&gt;
+    `,
+    systemPrompt: `You are an expert AI design agent with a track record of producing award-winning, world-class designs. Your task is to analyze the provided &lt;CODEBASE&gt;, &lt;RULES&gt;, &lt;TASK&gt;, &lt;DESIGN_RUBRIC&gt;, &lt;INSTRUCTIONS&gt;, and &lt;PROMPT&gt; sections, and convert the high-level design &lt;TASK&gt; into a detailed, step-by-step design plan. Adhere strictly to the &lt;DESIGN_RUBRIC&gt; ensuring every design decision meets an A rating in every category.
+
+Your output must:
+
+1. **Design Excellence:**  
+   - Ensure that every design decision aligns with the &lt;DESIGN_RUBRIC&gt; and meets an A rating in every category.
+   - Each design task must be a distinct story point with an unchecked markdown checkbox (e.g., \`- [ ]\`).
+
+2. **Actionable Design Tasks:**  
+   - Specify the exact files or components that need modification.
+   - Describe the required changes, including layout adjustments, typography updates, color palette modifications, and grid or spacing refinements.
+   - Include specific examples (e.g., file names, CSS classes, component names) and reference the corresponding rubric criteria.
+
+3. **Detailed Rationale:**  
+   - For each task, provide a brief explanation of the design rationale.
+   - Highlight potential impacts on overall design consistency and user experience.
+
+4. **Technical Boundaries:**  
+   - Only include tasks that the AI design agent can execute directly (do not include manual testing or external validations).
+   - Exclude any additional commentary or meta instructions not directly related to task execution.
+
+5. **Final Steps:**  
+   - Ensure that the final task instructs the agent to run a build process and commit the changes.
+   - Include any necessary commands for version control where applicable.
+
+6. **Markdown Clarity:**  
+   - Use clear, numbered lists and markdown checkboxes for each task.
+   - Structure your output so it is easy to follow and execute step by step.
+
+Your output should be a detailed, actionable checklist in markdown format that an AI design agent can execute, ensuring that every step is clear, specific, and aligned with the highest design standards.
+
+${baseSystemPrompt}`
+  }
+};</file><file path="src/index.ts">import { Server } from &quot;@modelcontextprotocol/sdk/server/index.js&quot;;
+import { StdioServerTransport } from &quot;@modelcontextprotocol/sdk/server/stdio.js&quot;;
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from &quot;@modelcontextprotocol/sdk/types.js&quot;;
+
+import {
+  screenshotToolName,
+  screenshotToolDescription,
+  ScreenshotToolSchema,
+  runScreenshotTool,
+} from &quot;./tools/screenshot.js&quot;;
+
+import {
+  agentTaskToolName,
+  agentTaskToolDescription,
+  AgentTaskToolSchema,
+  runAgentTaskTool,
+} from &quot;./tools/agent_task.js&quot;;
+
+import {
+  codeReviewToolName,
+  codeReviewToolDescription,
+  CodeReviewToolSchema,
+  runCodeReviewTool,
+} from &quot;./tools/code_review.js&quot;;
+
+import {
+  initCursorToolName,
+  initCursorToolDescription,
+  InitCursorToolSchema,
+  runInitCursorTool,
+} from &quot;./tools/init_cursor.js&quot;;
+
+/**
+ * A minimal MCP server providing four Cursor Tools:
+ *   1) InitCursor
+ *   2) Screenshot
+ *   3) AgentTask
+ *   4) CodeReview
+ */
+
+// 1. Create an MCP server instance
+const server = new Server(
+  {
+    name: &quot;cursor-tools&quot;,
+    version: &quot;2.0.1&quot;,
+  },
+  {
+    capabilities: {
+      tools: {},
+    },
+  },
+);
+
+// 2. Define the list of tools
+server.setRequestHandler(ListToolsRequestSchema, async () =&gt; {
+  return {
+    tools: [
+      {
+        name: screenshotToolName,
+        description: screenshotToolDescription,
+        inputSchema: {
+          type: &quot;object&quot;,
+          properties: {
+            url: {
+              type: &quot;string&quot;,
+              description: &quot;Full URL to screenshot&quot;,
+            },
+            relativePath: {
+              type: &quot;string&quot;,
+              description: &quot;Relative path appended to http://localhost:3000&quot;,
+            },
+            fullPathToScreenshot: {
+              type: &quot;string&quot;,
+              description:
+                &quot;Path to where the screenshot file should be saved. This should be a cwd-style full path to the file (not relative to the current working directory) including the file name and extension.&quot;,
+            },
+          },
+          required: [],
+        },
+      },
+      {
+        name: agentTaskToolName,
+        description: agentTaskToolDescription,
+        inputSchema: {
+          type: &quot;object&quot;,
+          properties: {
+            task: { type: &quot;string&quot;, description: &quot;Task description&quot; },
+            agent: { type: &quot;string&quot;, description: &quot;Agent type&quot; },
+            code: { type: &quot;array&quot;, description: &quot;Array of files to analyze&quot; },
+          },
+          required: [&quot;task&quot;],
+        },
+      },
+      {
+        name: codeReviewToolName,
+        description: codeReviewToolDescription,
+        inputSchema: {
+          type: &quot;object&quot;,
+          properties: {
+            folderPath: {
+              type: &quot;string&quot;,
+              description:
+                &quot;Path to the full root directory of the repository to diff against main&quot;,
+            },
+          },
+          required: [&quot;folderPath&quot;],
+        },
+      },
+      {
+        name: initCursorToolName,
+        description: initCursorToolDescription,
+        inputSchema: {
+          type: &quot;object&quot;,
+          properties: {
+            destinationPath: {
+              type: &quot;string&quot;,
+              description: &quot;Full path where the template should be copied&quot;,
+            },
+          },
+          required: [&quot;destinationPath&quot;],
+        },
+      },
+    ],
+  };
+});
+
+// 3. Implement the tool call logic
+server.setRequestHandler(CallToolRequestSchema, async (request) =&gt; {
+  const { name, arguments: args } = request.params;
+
+  switch (name) {
+    case screenshotToolName: {
+      const validated = ScreenshotToolSchema.parse(args);
+      return await runScreenshotTool(validated);
+    }
+    case agentTaskToolName: {
+      const agentArgs = AgentTaskToolSchema.parse(args);
+      return await runAgentTaskTool(agentArgs);
+    }
+    case codeReviewToolName: {
+      const validated = CodeReviewToolSchema.parse(args);
+      return await runCodeReviewTool(validated);
+    }
+    case initCursorToolName: {
+      const validated = InitCursorToolSchema.parse(args);
+      return await runInitCursorTool(validated);
+    }
+    default:
+      throw new Error(`Unknown tool: ${name}`);
+  }
+});
+
+// 4. Start the MCP server with a stdio transport
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error(&quot;Cursor Tools MCP Server running on stdio&quot;);
+}
+
+main().catch((error) =&gt; {
+  console.error(&quot;Fatal error:&quot;, error);
+  process.exit(1);
+});</file><file path="src/paths.ts">import { fileURLToPath } from &apos;url&apos;;
+import path from &apos;path&apos;;
+
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Project root is one level up from src
+export const PROJECT_ROOT = path.resolve(__dirname, &apos;..&apos;);
+export const SRC_ROOT = __dirname;
+export const BUILD_ROOT = path.resolve(PROJECT_ROOT, &apos;build&apos;);
+
+// Helper function to resolve paths relative to project root
+export function resolveRoot(...paths: string[]): string {
+  return path.resolve(PROJECT_ROOT, ...paths);
+}
+
+// Helper function to resolve paths relative to src
+export function resolveSrc(...paths: string[]): string {
+  return path.resolve(SRC_ROOT, ...paths);
+}
+
+// Helper function to resolve paths relative to build
+export function resolveBuild(...paths: string[]): string {
+  return path.resolve(BUILD_ROOT, ...paths);
+}</file><file path=".gitignore">node_modules/
+dist/
+.out/
+.next/
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+logs/
+*.log
+.vscode/
+.idea/
+*.swp
+*.swo
+coverage/
+*.lcov
+src/env/
+build/
+.cursor/
+screenshots/</file><file path="LICENSE">MIT License
+
+Copyright (c) 2025 kleneway
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</file><file path="package.json">{
+  &quot;name&quot;: &quot;mcp-server&quot;,
+  &quot;version&quot;: &quot;2.0.2&quot;,
+  &quot;description&quot;: &quot;MCP Server with Cursor Tools: Screenshot, AgentTask, CodeReview, and InitCursor&quot;,
+  &quot;type&quot;: &quot;module&quot;,
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;rm -rf build &amp;&amp; tsc &amp;&amp; cp -r src/cursor-template build/&quot;,
+    &quot;start&quot;: &quot;node build/index.js&quot;
+  },
+  &quot;bin&quot;: {
+    &quot;cursor-tools&quot;: &quot;./build/index.js&quot;
+  },
+  &quot;dependencies&quot;: {
+    &quot;@modelcontextprotocol/sdk&quot;: &quot;^1.4.1&quot;,
+    &quot;openai&quot;: &quot;^4.82.0&quot;,
+    &quot;puppeteer&quot;: &quot;^24.1.1&quot;,
+    &quot;repomix&quot;: &quot;^0.2.29&quot;,
+    &quot;zod&quot;: &quot;^3.24.1&quot;
+  },
+  &quot;devDependencies&quot;: {
+    &quot;@types/node&quot;: &quot;^22.13.0&quot;,
+    &quot;typescript&quot;: &quot;^5.7.3&quot;
+  }
+}</file><file path="README.md"># 🤖 AI Development Assistant MCP Server
+
+Welcome to your AI-powered development toolkit, designed as a Model Context Protocol (MCP) server for Cursor! This project provides intelligent coding assistance through custom AI tools. Note that this is mostly a tutorial demo, and not a production-ready tool.
+
+## ✨ Features
+
+### 🎨 Code Architect
+
+Call advanced reasoning LLMs to generate plans and instructions for coding agents.
+
+### 📸 Screenshot Buddy
+
+Take UI design screenshots and use them with the composer agent.
+
+### 🔍 Code Review
+
+Use git diffs to trigger code reviews.
+
+### InitCursor Tool
+Initializes a new project with the cursor-template directory structure. This tool copies the template files from the source directory to a specified destination path.
+
+**Input Parameters:**
+- `destinationPath` (required): Full path where the template should be copied
+
+**Example Usage:**
+```typescript
+const result = await runInitCursorTool({
+  destinationPath: &quot;/path/to/your/project/.cursor&quot;
+});
+```
+
+The tool will create the `.cursor` directory at the specified path and copy all template files and directories into it.
+
+## 🚀 Getting Started
+
+### 1. Environment Setup
+
+First, you&apos;ll need to set up your environment variables. Create a file at `src/env/keys.ts`:
+
+```typescript
+export const OPENAI_API_KEY = &quot;your_key_here&quot;;
+// Add any other keys you need
+```
+
+&gt; ⚠️ **Security Note**: Storing API keys directly in source code is not recommended for production environments. This is only for local development and learning purposes. You can set the env var inline in the Cursor MCP interface as well.
+
+### 2. Installation
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Build the Server
+
+```bash
+npm run build
+```
+
+### 4. Adding to Cursor
+
+This project is designed to be used as an MCP server in Cursor. Here&apos;s how to set it up:
+
+1. Open Cursor
+2. Go to `Cursor Settings &gt; Features &gt; MCP`
+3. Click `+ Add New MCP Server`
+4. Fill out the form:
+   - **Name**: AI Development Assistant
+   - **Type**: stdio
+   - **Command**: `node /path/to/your/project/dist/index.js`
+
+&gt; 📘 **Pro Tip**: You might need to use the full path to your project&apos;s built index.js file.
+
+After adding the server, you should see your tools listed under &quot;Available Tools&quot;. If not, try clicking the refresh button in the top right corner of the MCP server section.
+
+For more details about MCP setup, check out the [Cursor MCP Documentation](https://docs.cursor.com/advanced/model-context-protocol).
+
+## 🛠️ Using the Tools
+
+Once configured, you can use these tools directly in Cursor&apos;s Composer. The AI will automatically suggest using relevant tools, or you can explicitly request them by name or description.
+
+For example, try typing in Composer:
+
+- &quot;Review this code for best practices&quot;
+- &quot;Help me architect a new feature&quot;
+- &quot;Analyze this UI screenshot&quot;
+
+The agent will ask for your approval before making any tool calls.
+
+&gt; 📘 **Pro Tip**: You can update your .cursorrules file with instructions on how to use the tools for certain scenarios, and the agent will use the tools automatically.
+
+## 📁 Project Structure
+
+```
+src/
+├── tools/
+│   ├── architect.ts    # Code structure generator
+│   ├── screenshot.ts   # Screenshot analysis tool
+│   └── codeReview.ts   # Code review tool
+├── env/
+│   └── keys.ts         # Environment configuration (add your API keys here!)
+└── index.ts           # Main entry point
+```
+
+## 🤝 Contributing
+
+Contributions welcome! Please feel free to submit a Pull Request.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🐛 Issues &amp; Support
+
+Found a bug or need help? Open an issue with:
+
+1. What you were trying to do
+2. What happened instead
+3. Steps to reproduce
+4. Your environment details
+
+---
+
+I&apos;ll be honest though, this is a tutorial demo, and not a production-ready tool so I likely won&apos;t be fixing issues. But feel free to fork it and make it your own!
+
+Made with ❤️ by developers, for developers</file><file path="repomix.config.json">{
+  &quot;ignore&quot;: {
+    &quot;useGitignore&quot;: false,
+    &quot;customPatterns&quot;: [
+      &quot;node_modules&quot;,
+      &quot;dist&quot;,
+      &quot;build&quot;,
+      &quot;.cursor&quot;,
+      &quot;src/cursor-template&quot;,
+      &quot;README.md&quot;,
+      &quot;.gitignore&quot;,
+      &quot;package.json&quot;,
+      &quot;package-lock.json&quot;,
+      &quot;LICENSE&quot;
+    ]
+  },
+  &quot;output&quot;: {
+    &quot;filePath&quot;: &quot;codebase.xml&quot;,
+    &quot;style&quot;: &quot;xml&quot;,
+    &quot;compress&quot;: false,
+    &quot;fileSummary&quot;: true,
+    &quot;directoryStructure&quot;: true,
+    &quot;removeComments&quot;: false,
+    &quot;removeEmptyLines&quot;: false,
+    &quot;showLineNumbers&quot;: false,
+    &quot;includeEmptyDirectories&quot;: false
+  }
+}</file><file path="tsconfig.json">{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES2022&quot;,
+    &quot;module&quot;: &quot;NodeNext&quot;,
+    &quot;moduleResolution&quot;: &quot;NodeNext&quot;,
+    &quot;outDir&quot;: &quot;./build&quot;,
+    &quot;rootDir&quot;: &quot;./src&quot;,
+    &quot;baseUrl&quot;: &quot;./src&quot;,
+    &quot;paths&quot;: {
+      &quot;@/*&quot;: [&quot;./*&quot;],
+      &quot;@tools/*&quot;: [&quot;tools/*&quot;],
+      &quot;@types/*&quot;: [&quot;types/*&quot;],
+      &quot;@helpers/*&quot;: [&quot;helpers/*&quot;],
+      &quot;@env/*&quot;: [&quot;env/*&quot;]
+    },
+    &quot;strict&quot;: true,
+    &quot;esModuleInterop&quot;: true,
+    &quot;skipLibCheck&quot;: true,
+    &quot;forceConsistentCasingInFileNames&quot;: true
+  },
+  &quot;include&quot;: [&quot;src/**/*&quot;],
+  &quot;exclude&quot;: [&quot;node_modules&quot;]
+}</file></files></repomix>
