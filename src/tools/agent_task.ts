@@ -1,18 +1,19 @@
 import { z } from "zod";
 import OpenAI from "openai";
-import { OPENAI_API_KEY } from "../env/keys.js";
+import { OPENAI_API_KEY, ANTHROPIC_API_KEY } from "../env/keys.js";
 import fs from 'fs/promises';
 import { TemplateBuilder } from "../helpers/template-builder.js";
 import { AgentType, agentConfigs } from "../types/template.js";
 import path from 'path';
 import { resolveRoot } from '../paths.js';
+import Anthropic from '@anthropic-ai/sdk';
 
 /**
  * Agent Task tools
  *   - Prompts for a task if not provided
  *   - Runs repomix to generate codebase content
  *   - Compiles an XML template with the task and codebase
- *   - Uses OpenAI to generate detailed implementation steps
+ *   - Uses Claude 3.7 to generate detailed implementation steps
  *   - Creates tasks in the .cursor/tasks/ directory with agent-specific files
  */
 
@@ -29,38 +30,68 @@ export const AgentTaskToolSchema = z.object({
 
 type AgentTaskToolInput = z.infer<typeof AgentTaskToolSchema>;
 
-async function processTemplateWithOpenAI(template: string, agent: AgentType): Promise<string> {
-  // Instantiate the new OpenAI client
-  const openai = new OpenAI({
-    apiKey: OPENAI_API_KEY,
-  });
-
+async function processTemplateWithClaudeOrOpenAI(template: string, agent: AgentType): Promise<string> {
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo-2024-04-09",
+    // Use Claude 3.7 for task generation
+    const anthropic = new Anthropic({
+      apiKey: ANTHROPIC_API_KEY,
+    });
+
+    const response = await anthropic.messages.create({
+      model: "claude-3-7-sonnet-20240620",
+      system: agentConfigs[agent].systemPrompt,
       messages: [
-        {
-          role: "system",
-          content: agentConfigs[agent].systemPrompt
-        },
         {
           role: "user",
           content: template
         }
-      ]
+      ],
+      max_tokens: 4000
     });
 
-    // Extract the content from the assistant's message (if available)
-    const assistantMessage = response.choices?.[0]?.message?.content ?? "No response from model.";
+    // Extract the content from Claude's response
+    const assistantMessage = response.content.find(block => block.type === 'text')?.text || "No response from Claude model.";
     
-    if (!assistantMessage || assistantMessage === "No response from model.") {
-      throw new Error("Failed to get valid response from OpenAI");
+    if (!assistantMessage || assistantMessage === "No response from Claude model.") {
+      throw new Error("Failed to get valid response from Claude");
     }
 
     return assistantMessage;
   } catch (error) {
-    // Throw a more specific error that includes the OpenAI error details
-    throw new Error(`OpenAI API error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error("Claude API error, falling back to OpenAI:", error);
+    
+    // Fallback to OpenAI if Claude fails
+    try {
+      const openai = new OpenAI({
+        apiKey: OPENAI_API_KEY,
+      });
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4-turbo-2024-04-09",
+        messages: [
+          {
+            role: "system",
+            content: agentConfigs[agent].systemPrompt
+          },
+          {
+            role: "user",
+            content: template
+          }
+        ]
+      });
+
+      // Extract the content from the assistant's message (if available)
+      const assistantMessage = response.choices?.[0]?.message?.content ?? "No response from OpenAI model.";
+      
+      if (!assistantMessage || assistantMessage === "No response from OpenAI model.") {
+        throw new Error("Failed to get valid response from OpenAI");
+      }
+
+      return assistantMessage;
+    } catch (openaiError) {
+      // If both Claude and OpenAI fail, throw a detailed error
+      throw new Error(`API error: Claude failed (${error instanceof Error ? error.message : 'Unknown error'}) and OpenAI fallback failed (${openaiError instanceof Error ? openaiError.message : 'Unknown error'})`);
+    }
   }
 }
 
@@ -84,8 +115,8 @@ export async function runAgentTaskTool(args: AgentTaskToolInput) {
     // Compile template
     const { content: template } = await builder.compile(task, code, undefined, agent);
 
-    // Process template with OpenAI and ensure we get valid content
-    const tasks = await processTemplateWithOpenAI(template, agent);
+    // Process template with Claude 3.7 (with OpenAI fallback) and ensure we get valid content
+    const tasks = await processTemplateWithClaudeOrOpenAI(template, agent);
     
     if (!tasks.trim()) {
       throw new Error(`Generated ${agent} tasks content is empty`);
