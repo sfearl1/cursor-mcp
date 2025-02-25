@@ -16,7 +16,7 @@ Take UI design screenshots and use them with the composer agent.
 
 Use git diffs to trigger code reviews.
 
-### InitCursor Tool
+### 🎯 InitCursor Tool
 Initializes a new project with the cursor-template directory structure. This tool copies the template files from the source directory to a specified destination path.
 
 **Input Parameters:**
@@ -25,7 +25,7 @@ Initializes a new project with the cursor-template directory structure. This too
 **Example Usage:**
 ```typescript
 const result = await runInitCursorTool({
-  destinationPath: "/path/to/your/project/.cursor"
+  destinationPath: "/path/to/your/project"  // .cursor will be created here
 });
 ```
 
@@ -68,7 +68,7 @@ This project is designed to be used as an MCP server in Cursor. Here's how to se
 4. Fill out the form:
    - **Name**: AI Development Assistant
    - **Type**: stdio
-   - **Command**: `node /path/to/your/project/dist/index.js`
+   - **Command**: `node /path/to/your/project/build/index.js`
 
 > 📘 **Pro Tip**: You might need to use the full path to your project's built index.js file.
 
@@ -84,24 +84,45 @@ For example, try typing in Composer:
 
 - "Review this code for best practices"
 - "Help me architect a new feature"
-- "Analyze this UI screenshot"
+- "Take a screenshot of this URL"
 
 The agent will ask for your approval before making any tool calls.
-
-> 📘 **Pro Tip**: You can update your .cursorrules file with instructions on how to use the tools for certain scenarios, and the agent will use the tools automatically.
 
 ## 📁 Project Structure
 
 ```
 src/
-├── tools/
-│   ├── architect.ts    # Code structure generator
-│   ├── screenshot.ts   # Screenshot analysis tool
-│   └── codeReview.ts   # Code review tool
+├── tools/           # Tool implementations
+│   ├── agent.ts     # Code structure generator
+│   ├── screenshot.ts # Screenshot tool
+│   ├── code_review.ts # Code review tool
+│   └── init_cursor.ts # Project initialization
+├── helpers/         # Shared utilities
+│   └── template-builder.ts # Template generation
+├── paths.ts         # Path resolution utilities
 ├── env/
-│   └── keys.ts         # Environment configuration (add your API keys here!)
-└── index.ts           # Main entry point
+│   └── keys.ts      # Environment configuration
+└── index.ts         # Main entry point
 ```
+
+## 🔄 Recent Improvements
+
+### Path Resolution Enhancement (v2.0.2)
+- Added centralized path resolution through `paths.ts`
+- Improved module imports with TypeScript path aliases
+- Fixed path resolution issues in template generation
+- Added proper build directory handling
+- Enhanced cross-platform compatibility
+
+### Project Structure
+- Improved organization with dedicated helpers directory
+- Better separation of concerns between tools
+- Enhanced template handling and generation
+
+### Security
+- Improved handling of sensitive information
+- Added build directory to .gitignore
+- Better environment variable management
 
 ## 🤝 Contributing
 

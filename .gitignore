@@ -18,3 +18,5 @@ coverage/
 *.lcov
 src/env/
 build/
+.cursor/
+screenshots/
