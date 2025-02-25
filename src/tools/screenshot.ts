@@ -1,7 +1,8 @@
 import puppeteer from "puppeteer";
 import { z } from "zod";
 import path from "path";
-import fs from "fs";
+import fs from "fs/promises";
+import { resolveRoot } from '../paths.js';
 /**
  * Screenshot tool
  *   - Takes in either "url" (a full URL) or "relativePath" to open on localhost:3000
@@ -29,7 +30,7 @@ export async function runScreenshotTool(
     }
     finalUrl = `http://localhost:3000/${args.relativePath.replace(/^\//, "")}`;
   }
-  const fullPathToScreenshot = path.resolve(args.fullPathToScreenshot);
+  const fullPathToScreenshot = resolveRoot(args.fullPathToScreenshot);
 
   // Launch Puppeteer
   const browser = await puppeteer.launch();
@@ -39,7 +40,7 @@ export async function runScreenshotTool(
     fullPage: true,
   })) as Buffer;
   await browser.close();
-  await fs.promises.writeFile(fullPathToScreenshot, screenshotBuffer);
+  await fs.writeFile(fullPathToScreenshot, screenshotBuffer);
   // Return the base64 representation
   return {
     content: [

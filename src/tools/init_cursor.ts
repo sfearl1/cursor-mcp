@@ -2,6 +2,7 @@ import { z } from 'zod';
 import fs from 'fs/promises';
 import path from 'path';
 import { ServerResult } from "@modelcontextprotocol/sdk/types.js";
+import { resolveSrc, resolveBuild } from '../paths.js';
 
 // Tool name and description
 export const initCursorToolName = 'init_cursor';
@@ -21,6 +22,11 @@ async function copyRecursive(src: string, dest: string): Promise<void> {
   const stats = await fs.stat(src);
   
   if (stats.isDirectory()) {
+    // Skip the agent-templates directory
+    if (path.basename(src) === 'agent-templates') {
+      return;
+    }
+    
     // Create destination directory if it doesn't exist
     await fs.mkdir(dest, { recursive: true });
     
@@ -43,8 +49,8 @@ async function copyRecursive(src: string, dest: string): Promise<void> {
  * Ensures the cursor-template exists in the build directory by copying from src if needed
  */
 async function ensureBuildTemplate(): Promise<string> {
-  const srcTemplateDir = path.join(path.dirname(path.dirname(new URL(import.meta.url).pathname)), '..', 'src', 'cursor-template');
-  const buildTemplateDir = path.join(path.dirname(path.dirname(new URL(import.meta.url).pathname)), 'cursor-template');
+  const srcTemplateDir = resolveSrc('cursor-template');
+  const buildTemplateDir = resolveBuild('cursor-template');
   
   try {
     // Check if build template exists

@@ -1,41 +1,47 @@
-Below is a detailed, step-by-step checklist outlining the work required to add the new MCP tool, **init_cursor**, which will initialize the contents of the `src/cursor-template` directory in a new project at .cursor/. Follow these instructions exactly:
+1. **Analyze Codebase for Path Resolution**
 
-> It is critical that you do not skip any steps. After you complete each task, update the file to check off any task. Run builds and commits after each task. Continue with each task until you have checked off each one. After each story, do not take a screenshot. If you need more detail about a task, you can gather relevant files and pass the FULL file to the research agent.
+   - [ ] Use the `read_multiple_files` tool to read `src/paths.ts`, `src/index.ts`, and all relevant JavaScript and TypeScript files in the `src` directory that might deal with imports or require statements to check if path resolution changes have been implemented correctly.
 
----
+2. **Verify and Update Import Statements**
 
-1. **Create the New Tool File**
-   - [ ] Create a new file at `src/tools/init_cursor.ts`.
-   - [ ] Define and export the tool name (e.g., `initCursorToolName`) and a concise description (e.g., "Initializes the cursor-template directory in a new project by copying template files").
-   - [ ] Implement an asynchronous function `runInitCursorTool` that:
-     - Accepts an input schema using Zod (require at least a `destinationPath` field as a string).
-     - Uses Node’s filesystem modules (e.g., `fs.promises` and `path`) to recursively copy the contents of the `src/cursor-template` directory from the source (e.g., `src/cursor-template`) to the provided destination path (default to `.cursor/`).
-     - Includes error handling and returns a confirmation message upon successful initialization.
-   - [ ] At the end of the function, ensure the tool logs or returns a success message indicating that the initialization is complete.
+   - [ ] In file `src/paths.ts`:
+     - Check if paths are defined using absolute or relative paths.
+     - Modify paths to use absolute paths for clearer and more reliable path resolution.
+     - **Rationale:** Absolute paths prevent issues related to relative paths when modules are moved or refactored.
+     - **Impact:** This modification ensures path resolution consistency across the codebase.
 
-2. **Define the Input Schema for init_cursor**
-   - [ ] Within `src/tools/init_cursor.ts`, use Zod to define an input schema (e.g., `InitCursorToolSchema`).
-   - [ ] Require at least one property: `"destinationPath"` (a string representing the full path where the template should be copied).
-   - [ ] Validate the input using this schema before performing any file operations.
+   - [ ] In all files under `src` that have imports:
+     - Replace all relative path imports with the updated paths from `src/paths.ts`.
+     - For each update, ensure imports are sorted according to the guideline: external → internal → sibling → styles.
+     - **Rationale:** Consistent use of the defined paths in `src/paths.ts` enhances maintenance and readability.
+     - **Impact:** Changes in how paths are defined in `src/paths.ts` can affect imports throughout the project.
 
-3. **Integrate the Tool into the MCP Server**
-   - [ ] Open `src/index.ts`.
-   - [ ] In the section where the MCP tools are listed (inside the `server.setRequestHandler(ListToolsRequestSchema, ...)` block), add a new entry for `init_cursor`:
-     - Include the tool name (`initCursorToolName`), description, and input schema (document the property `"destinationPath"`).
-   - [ ] In the `server.setRequestHandler(CallToolRequestSchema, ...)` switch-case block, add a new case for `"init_cursor"`:
-     - Validate the incoming arguments using the newly created `InitCursorToolSchema`.
-     - Call the `runInitCursorTool` function with the validated arguments.
-     - Return the result as specified by the tool’s contract.
+3. **Refactor Code for Path Utilization**
 
-4. **Update Documentation**
-   - [ ] Update the `README.md` file:
-     - Add a new section or update the Tools list to include documentation for the `init_cursor` tool.
-     - Provide a brief description and example usage (specify that it requires a `destinationPath` input).
-   - [ ] If applicable, update any internal docs (like a developer or CHANGELOG file) to note the addition of the new tool.
+   - [ ] In file `src/index.ts`:
+     - Update the file to utilize the new absolute paths for importing necessary modules or components.
+     - Ensure all path-related operations support the use of these new path configurations.
+     - **Rationale:** Ensures that the entry point of the application aligns with path resolution configurations.
+     - **Impact:** Major impact on how the application initializes and loads modules.
 
-5. **Finalize and Commit Changes**
-   - [ ] Run `npm run build` to build the project and ensure there are no errors.
-   - [ ] Update `.cursor/updates.md` with a one-sentence summary of the changes made (e.g., "Added the init_cursor tool to initialize the /cursor-template directory in new projects.").
-   - [ ] Commit all changes with a semantic commit message (e.g., `git add . && git commit -m "feat: add init_cursor tool for initializing cursor-template directory"`).
+4. **Configuration Update in `tsconfig.json`**
 
-Each of these tasks is a single story point. Make sure to check off each task after its completion and run the build after every step as instructed.
+   - [ ] Modify `tsconfig.json` to include or update the `baseUrl` and `paths` configurations to support absolute paths.
+     - Set `"baseUrl": "./src"`.
+     - Configure paths that reflect the structure of the project for clearer resolution.
+     - **Rationale:** Configuring TypeScript to recognize the base URL and paths helps in simplifying imports and maintaining consistency.
+     - **Impact:** Direct impact on how TypeScript resolves modules, therefore affecting the build process and potentially the runtime module resolution.
+
+5. **Build and Commit**
+
+   - [ ] Run a build to ensure all changes compile correctly using command `npm run build`.
+     - **Rationale:** Validates that the changes made do not introduce errors and are compatible with the rest of the codebase.
+     - **Impact:** Confirmation that the application is still functional after the modifications.
+
+   - [ ] Document changes in `.cursor/updates.md`:
+     - Add a summary explaining the updates made to path resolution and import structuring.
+     - **Rationale:** Provides documentation for future reference and clarity on what changes were made during this operation.
+
+   - [ ] Use `git add . && git commit -m "Refactor path resolution and update import structures for enhanced reliability."`
+     - **Rationale:** Version control update to save the changes made.
+     - **Impact:** Maintains a historical record of the changes and ensures they are tracked in version control.
