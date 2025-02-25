@@ -68,6 +68,16 @@ export async function runAgentTaskTool(args: AgentTaskToolInput) {
   try {
     const { task, code, agent } = args;
 
+    // Validate agent type and provide clear error messages
+    if (!Object.keys(agentConfigs).includes(agent)) {
+      throw new Error(`Invalid agent type: ${agent}. Supported types are: ${Object.keys(agentConfigs).join(', ')}`);
+    }
+
+    // Engineer-specific validation
+    if (agent === 'engineer' && (!task || task.trim() === '')) {
+      throw new Error("Engineer role requires a detailed task description with implementation steps");
+    }
+
     // Initialize template builder
     const builder = new TemplateBuilder();
     
@@ -78,7 +88,7 @@ export async function runAgentTaskTool(args: AgentTaskToolInput) {
     const tasks = await processTemplateWithOpenAI(template, agent);
     
     if (!tasks.trim()) {
-      throw new Error("Generated tasks content is empty");
+      throw new Error(`Generated ${agent} tasks content is empty`);
     }
 
     // Create .cursor directory if it doesn't exist

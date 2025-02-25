@@ -88,7 +88,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           type: "object",
           properties: {
             task: { type: "string", description: "Task description" },
-            agent: { type: "string", description: "Agent type" },
+            agent: { 
+              type: "string", 
+              description: "Agent type (architect, designer, or engineer)", 
+              enum: ["architect", "designer", "engineer"] 
+            },
             code: { type: "array", description: "Array of files to analyze" },
           },
           required: ["task"],

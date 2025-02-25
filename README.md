@@ -14,7 +14,12 @@ Generate detailed design tasks with comprehensive UI/UX guidelines.
 
 ### 👨‍💻 Engineer
 
-Meticulously implement architect and designer plans with thorough task tracking and high-quality code.
+Meticulously implement architect and designer plans with thorough task tracking and high-quality code. The engineer role:
+- Methodically tracks progress by updating task lists as items are completed
+- Prevents circular or redundant work by recognizing already-completed tasks
+- Produces comprehensive, well-tested implementations with proper error handling
+- Ensures code quality with thorough documentation and TypeScript safety
+- Makes focused, atomic commits with clear messages
 
 ### 📸 Screenshot Buddy
 

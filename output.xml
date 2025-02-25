@@ -22,6 +22,7 @@ or other automated processes.</purpose><file_format>The content is organized as 
     agent-templates/
       architect.xml
       designer.xml
+      engineer.xml
       template.xml
     rules.md
   helpers/
@@ -127,7 +128,55 @@ tsconfig.json</directory_structure><files>This section contains the contents of 
         You are a professional, award-winning, world-class designer. Your job is to take the \`&lt;TASK&gt;\` and turn it into an impeccably designed component or web application. This component or application should be in the top 1% of well designed applications and should be a winner of an Apple design award. Use the \`&lt;DESIGN RUBRIC&gt;\` as a guide and do not complete this task until you score an A in every category. Review the \`&lt;INSTRUCTIONS&gt;\` for more details on creating the steps to complete the task. 
     &lt;/PROMPT&gt;
 
-&lt;/DESIGNER&gt;</file><file path="src/cursor-template/agent-templates/template.xml">&lt;AGENT-TEMPLATE&gt;
+&lt;/DESIGNER&gt;</file><file path="src/cursor-template/agent-templates/engineer.xml">&lt;ENGINEER&gt;
+
+    &lt;CODEBASE&gt;
+    &lt;!-- INSERT CODEBASE HERE --&gt;
+    &lt;/CODEBASE&gt;
+
+    &lt;RULES&gt;
+    &lt;!-- INSERT RULES HERE --&gt;
+    &lt;/RULES&gt;
+
+    &lt;TASK&gt;
+    &lt;!-- INSERT TASK DESCRIPTION HERE --&gt;
+    &lt;/TASK&gt;
+
+    &lt;INSTRUCTIONS&gt;
+        Use the `&lt;CODEBASE&gt;` as your foundation and implement the `&lt;TASK&gt;` with precision and attention to detail. Track your progress and avoid redundant or circular work.
+
+        1. **Implementation Approach**:
+           - Work through tasks systematically, checking off items as they&apos;re completed
+           - Make comprehensive, well-tested changes that fully address each task
+           - Avoid shortcuts or partial implementations that might require rework
+           - Ensure proper error handling and edge case coverage
+
+        2. **Code Quality Focus**:
+           - Write clean, maintainable code that follows project conventions
+           - Add thorough documentation for all new functionality
+           - Ensure proper type safety and interface consistency
+           - Optimize for performance and readability
+           - Follow DRY principles and avoid code duplication
+
+        3. **Change Management**:
+           - Track task completion by updating the task list
+           - Avoid circular work or reimplementing already completed tasks
+           - Ensure each change fits coherently with the overall architecture
+           - Make atomic, focused commits with clear messages
+
+        4. **Completion Criteria**:
+           - All task items are checked off
+           - Code builds successfully without warnings or errors
+           - Implementation fully satisfies the requirements
+           - Changes are thoroughly documented
+           - No redundant or unnecessary modifications
+    &lt;/INSTRUCTIONS&gt;
+
+    &lt;PROMPT&gt;
+        You are an expert implementation engineer specializing in turning plans into precise, high-quality code. Given the `&lt;TASK&gt;` and `&lt;CODEBASE&gt;`, implement the steps outlined in the task list methodically and thoroughly. Track your progress by updating the task list as you complete each item. Use the `&lt;INSTRUCTIONS&gt;` as guidance for your implementation approach.
+    &lt;/PROMPT&gt;
+
+&lt;/ENGINEER&gt;</file><file path="src/cursor-template/agent-templates/template.xml">&lt;AGENT-TEMPLATE&gt;
 
     &lt;CODEBASE&gt;
     &lt;!-- REPOMIX CODEBASE --&gt;
@@ -214,8 +263,9 @@ tsconfig.json</directory_structure><files>This section contains the contents of 
         ## Tools / MCP Tools
 
         - When you make a change to the UI, use the `screenshot` tool to show the changes.
-        - If the user asks for a complex task to be performed, find any relevant files and call the `architect` tool to get a plan and show it to the user. Use this plan as guidance for the changes you make, but maintain the existing patterns and structure of the codebase.
-        - If the user asks for a UI task to be performed, call the `designer` tool and use the rubric as guidance for the design decisions, but maintain the existing patterns and structure of the codebase.
+        - If the user asks for a complex task to be performed, find any relevant files and call the `agent_task` tool with the &quot;architect&quot; agent type to get a plan and show it to the user. Use this plan as guidance for the changes you make, but maintain the existing patterns and structure of the codebase.
+        - If the user asks for a UI task to be performed, call the `agent_task` tool with the &quot;designer&quot; agent type and use the rubric as guidance for the design decisions, but maintain the existing patterns and structure of the codebase.
+        - For thorough implementation of complex tasks, call the `agent_task` tool with the &quot;engineer&quot; agent type to meticulously implement architectural plans or design tasks, track progress, and ensure high-quality code without redundant work.
         - After a complex task is performed, use the `code_review` tool to create a diff and use the diff to conduct a code review of the changes. Use the `sequential_thinking` tool to reason about the changes to understand them.
         - When reading a single file, use the Filesystem MCP Tool `read_file`. This will allow the agent to read entire files.
         - When reading multiple files, use the Filesystem MCP Tool `read_multiple_files`. This will allow the agent to read entire files simultaneously before processing them.
@@ -450,10 +500,10 @@ export const agentTaskToolDescription =
   &quot;Analyzes a task description and codebase to generate detailed implementation steps.&quot;;
 
 export const AgentTaskToolSchema = z.object({
-  task: z.string().describe(&quot;Description of the task&quot;),
+  task: z.string().describe(&quot;Task description&quot;),
   code: z.array(z.string()).optional().describe(&quot;Array of files to analyze&quot;),
   rules: z.array(z.string()).optional().describe(&quot;Array of rules to follow&quot;),
-  agent: z.enum([&quot;architect&quot;, &quot;designer&quot;]).default(&quot;architect&quot;).describe(&quot;Agent type&quot;),
+  agent: z.enum([&quot;architect&quot;, &quot;designer&quot;, &quot;engineer&quot;]).default(&quot;architect&quot;).describe(&quot;Agent type&quot;),
 });
 
 type AgentTaskToolInput = z.infer&lt;typeof AgentTaskToolSchema&gt;;
@@ -497,6 +547,16 @@ export async function runAgentTaskTool(args: AgentTaskToolInput) {
   try {
     const { task, code, agent } = args;
 
+    // Validate agent type and provide clear error messages
+    if (!Object.keys(agentConfigs).includes(agent)) {
+      throw new Error(`Invalid agent type: ${agent}. Supported types are: ${Object.keys(agentConfigs).join(&apos;, &apos;)}`);
+    }
+
+    // Engineer-specific validation
+    if (agent === &apos;engineer&apos; &amp;&amp; (!task || task.trim() === &apos;&apos;)) {
+      throw new Error(&quot;Engineer role requires a detailed task description with implementation steps&quot;);
+    }
+
     // Initialize template builder
     const builder = new TemplateBuilder();
     
@@ -507,7 +567,7 @@ export async function runAgentTaskTool(args: AgentTaskToolInput) {
     const tasks = await processTemplateWithOpenAI(template, agent);
     
     if (!tasks.trim()) {
-      throw new Error(&quot;Generated tasks content is empty&quot;);
+      throw new Error(`Generated ${agent} tasks content is empty`);
     }
 
     // Create .cursor directory if it doesn&apos;t exist
@@ -751,7 +811,7 @@ export interface SharedConfig {
 }
 
 // Template builder options
-export type ToolName = &apos;architect&apos; | &apos;designer&apos;;
+export type ToolName = &apos;architect&apos; | &apos;designer&apos; | &apos;engineer&apos;;
 
 // Re-export Repomix types
 export type { RepomixConfig };
@@ -772,7 +832,7 @@ export interface CompiledTemplate {
   };
 }
 
-export type AgentType = &apos;architect&apos; | &apos;designer&apos;;
+export type AgentType = &apos;architect&apos; | &apos;designer&apos; | &apos;engineer&apos;;
 
 export interface AgentConfig {
   prompt: string;
@@ -904,6 +964,70 @@ Your output must:
 Your output should be a detailed, actionable checklist in markdown format that an AI design agent can execute, ensuring that every step is clear, specific, and aligned with the highest design standards.
 
 ${baseSystemPrompt}`
+  },
+  engineer: {
+    prompt: `You are an expert implementation engineer specializing in turning plans into precise, high-quality code. Given the \`&lt;TASK&gt;\` and \`&lt;CODEBASE&gt;\`, implement the steps outlined in the task list methodically and thoroughly. Track your progress by updating the task list as you complete each item. Use the \`&lt;INSTRUCTIONS&gt;\` as guidance for your implementation approach.`,
+    instructions: `Use the \`&lt;CODEBASE&gt;\` as your foundation and implement the \`&lt;TASK&gt;\` with precision and attention to detail. Track your progress and avoid redundant or circular work.
+
+    1. **Implementation Approach**:
+       - Work through tasks systematically, checking off items as they&apos;re completed
+       - Make comprehensive, well-tested changes that fully address each task
+       - Avoid shortcuts or partial implementations that might require rework
+       - Ensure proper error handling and edge case coverage
+
+    2. **Code Quality Focus**:
+       - Write clean, maintainable code that follows project conventions
+       - Add thorough documentation for all new functionality
+       - Ensure proper type safety and interface consistency
+       - Optimize for performance and readability
+       - Follow DRY principles and avoid code duplication
+
+    3. **Change Management**:
+       - Track task completion by updating the task list
+       - Avoid circular work or reimplementing already completed tasks
+       - Ensure each change fits coherently with the overall architecture
+       - Make atomic, focused commits with clear messages
+
+    4. **Completion Criteria**:
+       - All task items are checked off
+       - Code builds successfully without warnings or errors
+       - Implementation fully satisfies the requirements
+       - Changes are thoroughly documented
+       - No redundant or unnecessary modifications`,
+    systemPrompt: `You are an expert implementation engineer specializing in executing pre-defined tasks with precision and thoroughness. Your job is to analyze the provided &lt;CODEBASE&gt;, &lt;RULES&gt;, &lt;TASK&gt;, &lt;INSTRUCTIONS&gt;, and &lt;PROMPT&gt; sections and implement the tasks described in the &lt;TASK&gt; with meticulous attention to detail.
+
+1. **Task Tracking:**
+   - Maintain and update the task list as you progress, checking off completed items.
+   - Focus on one task at a time, ensuring each is fully completed before moving to the next.
+   - If you encounter dependencies between tasks, note them and ensure they&apos;re addressed in the correct order.
+
+2. **Implementation Excellence:**
+   - Write clean, maintainable code that follows the project&apos;s existing conventions and patterns.
+   - Ensure comprehensive error handling and edge case coverage.
+   - Add thorough documentation for all new functionality.
+   - Validate that each implementation fully satisfies its requirements.
+
+3. **Avoiding Redundancy:**
+   - Prevent circular work or reimplementation of completed tasks.
+   - Recognize when a task has already been addressed by previous changes.
+   - Identify opportunities to reuse existing code and patterns.
+   - Note when tasks have become obsolete due to architectural changes.
+
+4. **Precision and Completeness:**
+   - Ensure changes are precise and targeted to the specific requirements.
+   - Complete all aspects of each task, not just the obvious or easy parts.
+   - Test your implementations thoroughly before marking them complete.
+   - Always run the build process to validate your changes.
+
+5. **Build and Commit Discipline:**
+   - Make regular, atomic commits with clear, descriptive messages.
+   - Run the build process after completing each significant task.
+   - Ensure the codebase remains in a buildable state throughout implementation.
+   - Flag any build errors or warnings for immediate resolution.
+
+Your output should be a step-by-step record of your implementation process, with each completed task clearly marked and any adjustments to the plan documented.
+
+${baseSystemPrompt}`
   }
 };</file><file path="src/index.ts">import { Server } from &quot;@modelcontextprotocol/sdk/server/index.js&quot;;
 import { StdioServerTransport } from &quot;@modelcontextprotocol/sdk/server/stdio.js&quot;;
@@ -944,7 +1068,7 @@ import {
  * A minimal MCP server providing four Cursor Tools:
  *   1) InitCursor
  *   2) Screenshot
- *   3) AgentTask
+ *   3) AgentTask (with architect, designer, and engineer roles)
  *   4) CodeReview
  */
 
@@ -952,7 +1076,7 @@ import {
 const server = new Server(
   {
     name: &quot;cursor-tools&quot;,
-    version: &quot;2.0.1&quot;,
+    version: &quot;2.0.2&quot;,
   },
   {
     capabilities: {
@@ -995,7 +1119,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () =&gt; {
           type: &quot;object&quot;,
           properties: {
             task: { type: &quot;string&quot;, description: &quot;Task description&quot; },
-            agent: { type: &quot;string&quot;, description: &quot;Agent type&quot; },
+            agent: { 
+              type: &quot;string&quot;, 
+              description: &quot;Agent type (architect, designer, or engineer)&quot;, 
+              enum: [&quot;architect&quot;, &quot;designer&quot;, &quot;engineer&quot;] 
+            },
             code: { type: &quot;array&quot;, description: &quot;Array of files to analyze&quot; },
           },
           required: [&quot;task&quot;],
@@ -1165,9 +1293,17 @@ Welcome to your AI-powered development toolkit, designed as a Model Context Prot
 
 ## ✨ Features
 
-### 🎨 Code Architect
+### 🏗️ Code Architect
 
 Call advanced reasoning LLMs to generate plans and instructions for coding agents.
+
+### 🎨 UI Designer
+
+Generate detailed design tasks with comprehensive UI/UX guidelines.
+
+### 👨‍💻 Engineer
+
+Meticulously implement architect and designer plans with thorough task tracking and high-quality code.
 
 ### 📸 Screenshot Buddy
 
@@ -1177,7 +1313,7 @@ Take UI design screenshots and use them with the composer agent.
 
 Use git diffs to trigger code reviews.
 
-### InitCursor Tool
+### 🚀 InitCursor Tool
 Initializes a new project with the cursor-template directory structure. This tool copies the template files from the source directory to a specified destination path.
 
 **Input Parameters:**
