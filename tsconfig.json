@@ -5,6 +5,14 @@
     "moduleResolution": "NodeNext",
     "outDir": "./build",
     "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "@tools/*": ["tools/*"],
+      "@types/*": ["types/*"],
+      "@helpers/*": ["helpers/*"],
+      "@env/*": ["env/*"]
+    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
