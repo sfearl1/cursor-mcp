@@ -13,11 +13,11 @@ import {
 } from "./tools/screenshot.js";
 
 import {
-  agentToolName,
-  agentToolDescription,
-  AgentToolSchema,
-  runAgentTool,
-} from "./tools/agent.js";
+  agentTaskToolName,
+  agentTaskToolDescription,
+  AgentTaskToolSchema,
+  runAgentTaskTool,
+} from "./tools/agent_task.js";
 
 import {
   codeReviewToolName,
@@ -37,7 +37,7 @@ import {
  * A minimal MCP server providing four Cursor Tools:
  *   1) InitCursor
  *   2) Screenshot
- *   3) Agent
+ *   3) AgentTask
  *   4) CodeReview
  */
 
@@ -82,8 +82,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
       {
-        name: agentToolName,
-        description: agentToolDescription,
+        name: agentTaskToolName,
+        description: agentTaskToolDescription,
         inputSchema: {
           type: "object",
           properties: {
@@ -136,9 +136,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const validated = ScreenshotToolSchema.parse(args);
       return await runScreenshotTool(validated);
     }
-    case agentToolName: {
-      const agentArgs = AgentToolSchema.parse(args);
-      return await runAgentTool(agentArgs);
+    case agentTaskToolName: {
+      const agentArgs = AgentTaskToolSchema.parse(args);
+      return await runAgentTaskTool(agentArgs);
     }
     case codeReviewToolName: {
       const validated = CodeReviewToolSchema.parse(args);

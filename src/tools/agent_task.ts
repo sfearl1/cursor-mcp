@@ -5,9 +5,10 @@ import fs from 'fs/promises';
 import { TemplateBuilder } from "../helpers/template-builder.js";
 import { AgentType, agentConfigs } from "../types/template.js";
 import path from 'path';
+import { resolveRoot } from '../paths.js';
 
 /**
- * Agent tools
+ * Agent Task tools
  *   - Prompts for a task if not provided
  *   - Runs repomix to generate codebase content
  *   - Compiles an XML template with the task and codebase
@@ -15,18 +16,18 @@ import path from 'path';
  *   - Creates a tasks.md file with the steps
  */
 
-export const agentToolName = "agent";
-export const agentToolDescription =
+export const agentTaskToolName = "agent_task";
+export const agentTaskToolDescription =
   "Analyzes a task description and codebase to generate detailed implementation steps.";
 
-export const AgentToolSchema = z.object({
+export const AgentTaskToolSchema = z.object({
   task: z.string().describe("Description of the task"),
   code: z.array(z.string()).optional().describe("Array of files to analyze"),
   rules: z.array(z.string()).optional().describe("Array of rules to follow"),
   agent: z.enum(["architect", "designer"]).default("architect").describe("Agent type"),
 });
 
-type AgentToolInput = z.infer<typeof AgentToolSchema>;
+type AgentTaskToolInput = z.infer<typeof AgentTaskToolSchema>;
 
 async function processTemplateWithOpenAI(template: string, agent: AgentType): Promise<string> {
   // Instantiate the new OpenAI client
@@ -63,7 +64,7 @@ async function processTemplateWithOpenAI(template: string, agent: AgentType): Pr
   }
 }
 
-export async function runAgentTool(args: AgentToolInput) {
+export async function runAgentTaskTool(args: AgentTaskToolInput) {
   try {
     const { task, code, agent } = args;
 
@@ -81,10 +82,7 @@ export async function runAgentTool(args: AgentToolInput) {
     }
 
     // Create .cursor directory if it doesn't exist
-    const cursorDir = path.resolve(
-      path.dirname(new URL(import.meta.url).pathname),
-      '../../.cursor'
-    );
+    const cursorDir = resolveRoot('.cursor');
     await fs.mkdir(cursorDir, { recursive: true });
 
     // Save tasks to .cursor/tasks.md
