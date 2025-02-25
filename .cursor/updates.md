@@ -120,3 +120,30 @@ Added core functionality for the new engineer role to the agent_task tool:
    - Built and verified the implementation works without errors
 
 The engineer role is designed to methodically implement tasks created by architect and designer roles while tracking progress, preventing redundant work, and ensuring high-quality code with proper error handling. The next steps are to reload the MCP server and create a PR to merge these changes to main.
+
+# Task Structure Refactoring
+
+Refactored task storage to use a more organized directory structure:
+
+1. New Directory Structure
+   - Created .cursor/tasks/ directory to store agent-specific task files
+   - Implemented separate files for each agent type (.cursor/tasks/{architect,designer,engineer}.md)
+   - Updated agent_task.ts to save tasks to the appropriate file based on agent type
+
+2. Migration Strategy
+   - Added backward compatibility by maintaining the legacy tasks.md file
+   - Added redirect notice to help users find the new task files
+   - Ensured seamless transition for existing projects
+
+3. Template Updates
+   - Modified init_cursor.ts to create the task directory structure in new projects
+   - Added placeholder files for each agent type
+   - Updated documentation in rules.md to reflect the new structure
+
+4. Benefits
+   - Clear separation of concerns between different agent types
+   - Prevention of task overlap and confusion
+   - Better organization for complex projects with multiple agent roles
+   - Improved maintainability and readability of task files
+
+This refactoring complements the engineer role implementation by providing a more structured approach to task management, aligning with the engineer's focus on methodical task tracking and comprehensive implementation.

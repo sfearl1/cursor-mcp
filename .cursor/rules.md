@@ -60,9 +60,10 @@
         ## Tools / MCP Tools
 
         - When you make a change to the UI, use the `screenshot` tool to show the changes.
-        - If the user asks for a complex task to be performed, find any relevant files and call the `agent_task` tool with the "architect" agent type to get a plan and show it to the user. Use this plan as guidance for the changes you make, but maintain the existing patterns and structure of the codebase.
-        - If the user asks for a UI task to be performed, call the `agent_task` tool with the "designer" agent type and use the rubric as guidance for the design decisions, but maintain the existing patterns and structure of the codebase.
-        - For thorough implementation of complex tasks, call the `agent_task` tool with the "engineer" agent type to meticulously implement architectural plans or design tasks, track progress, and ensure high-quality code without redundant work.
+        - If the user asks for a complex task to be performed, find any relevant files and call the `agent_task` tool with the "architect" agent type to get a plan and show it to the user. The plan will be saved to `.cursor/tasks/architect.md`. Use this plan as guidance for the changes you make, but maintain the existing patterns and structure of the codebase.
+        - If the user asks for a UI task to be performed, call the `agent_task` tool with the "designer" agent type and use the rubric as guidance for the design decisions. The design plan will be saved to `.cursor/tasks/designer.md`. Maintain the existing patterns and structure of the codebase.
+        - For thorough implementation of complex tasks, call the `agent_task` tool with the "engineer" agent type to meticulously implement architectural plans or design tasks, track progress, and ensure high-quality code without redundant work. Implementation steps will be saved to `.cursor/tasks/engineer.md`.
+        - Tasks from each agent type are stored in separate files in the `.cursor/tasks/` directory to avoid overlap.
         - After a complex task is performed, use the `code_review` tool to create a diff and use the diff to conduct a code review of the changes. Use the `sequential_thinking` tool to reason about the changes to understand them.
         - When reading a single file, use the Filesystem MCP Tool `read_file`. This will allow the agent to read entire files.
         - When reading multiple files, use the Filesystem MCP Tool `read_multiple_files`. This will allow the agent to read entire files simultaneously before processing them.
