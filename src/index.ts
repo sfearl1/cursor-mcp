@@ -13,11 +13,11 @@ import {
 } from "./tools/screenshot.js";
 
 import {
-  architectToolName,
-  architectToolDescription,
-  ArchitectToolSchema,
-  runArchitectTool,
-} from "./tools/architect.js";
+  agentToolName,
+  agentToolDescription,
+  AgentToolSchema,
+  runAgentTool,
+} from "./tools/agent.js";
 
 import {
   codeReviewToolName,
@@ -34,12 +34,11 @@ import {
 } from "./tools/init_cursor.js";
 
 /**
- * A minimal MCP server providing five Cursor Tools:
+ * A minimal MCP server providing four Cursor Tools:
  *   1) InitCursor
  *   2) Screenshot
- *   3) Architect
- *   4) Designer
- *   5) CodeReview
+ *   3) Agent
+ *   4) CodeReview
  */
 
 // 1. Create an MCP server instance
@@ -83,37 +82,16 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
       {
-        name: architectToolName,
-        description: architectToolDescription,
+        name: agentToolName,
+        description: agentToolDescription,
         inputSchema: {
           type: "object",
           properties: {
-            task: {
-              type: "string",
-              description: "Description of the task - will prompt if not provided",
-            },
-            templatePath: {
-              type: "string",
-              description: "Path to the template XML file",
-              default: "src/cursor-template/template.xml",
-            },
-            rulesPath: {
-              type: "string",
-              description: "Path to the rules markdown file",
-              default: "src/cursor-template/rules.md",
-            },
-            outputPath: {
-              type: "string",
-              description: "Path where tasks.md should be written",
-              default: ".cursor/tasks.md",
-            },
-            repomixConfigPath: {
-              type: "string",
-              description: "Path to the repomix config file",
-              default: "repomix.config.json",
-            },
+            task: { type: "string", description: "Task description" },
+            agent: { type: "string", description: "Agent type" },
+            code: { type: "array", description: "Array of files to analyze" },
           },
-          required: [],
+          required: ["task"],
         },
       },
       {
@@ -158,9 +136,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const validated = ScreenshotToolSchema.parse(args);
       return await runScreenshotTool(validated);
     }
-    case architectToolName: {
-      const validated = ArchitectToolSchema.parse(args);
-      return await runArchitectTool(validated);
+    case agentToolName: {
+      const agentArgs = AgentToolSchema.parse(args);
+      return await runAgentTool(agentArgs);
     }
     case codeReviewToolName: {
       const validated = CodeReviewToolSchema.parse(args);

@@ -9,7 +9,6 @@
       "src/cursor-template",
       "README.md",
       ".gitignore",
-      "repomix.config.json",
       "package.json",
       "package-lock.json",
       "LICENSE"

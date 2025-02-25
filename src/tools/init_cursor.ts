@@ -21,6 +21,11 @@ async function copyRecursive(src: string, dest: string): Promise<void> {
   const stats = await fs.stat(src);
   
   if (stats.isDirectory()) {
+    // Skip the agent-templates directory
+    if (path.basename(src) === 'agent-templates') {
+      return;
+    }
+    
     // Create destination directory if it doesn't exist
     await fs.mkdir(dest, { recursive: true });
     
