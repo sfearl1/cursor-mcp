@@ -25,7 +25,7 @@ export const AgentTaskToolSchema = z.object({
   task: z.string().describe("Task description"),
   code: z.array(z.string()).optional().describe("Array of files to analyze"),
   rules: z.array(z.string()).optional().describe("Array of rules to follow"),
-  agent: z.enum(["planner", "actor", "designer"]).default("planner").describe("Agent type"),
+  agent: z.enum(["planner", "designer"]).default("planner").describe("Agent type"),
 });
 
 type AgentTaskToolInput = z.infer<typeof AgentTaskToolSchema>;

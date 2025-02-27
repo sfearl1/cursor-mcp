@@ -62,7 +62,7 @@
         - When you make a change to the UI, use the `screenshot` tool to show the changes.
         - If the user asks for a complex task to be performed, find any relevant files and call the `agent_task` tool with the "planner" agent type to get a plan and show it to the user. The plan will be saved to `.cursor/tasks/planner.md`. Use this plan as guidance for the changes you make, but maintain the existing patterns and structure of the codebase.
         - If the user asks for a UI task to be performed, call the `agent_task` tool with the "designer" agent type and use the rubric as guidance for the design decisions. The design plan will be saved to `.cursor/tasks/designer.md`. Maintain the existing patterns and structure of the codebase.
-        - For thorough implementation of complex tasks, call the `agent_task` tool with the "actor" agent type to meticulously implement plans or design tasks, track progress, and ensure high-quality code without redundant work. Implementation steps will be saved to `.cursor/tasks/actor.md`.
+        - The AI assistant in the IDE acts as the implementation engineer, meticulously implementing the plans or design tasks, tracking progress, and ensuring high-quality code without redundant work.
         - Task progress is stored in `.cursor/tasks.md`.
         - After a complex task is performed, use the `code_review` tool to create a diff and use the diff to conduct a code review of the changes. Use the `sequential_thinking` tool to reason about the changes to understand them.
         - When reading a single file, use the Filesystem MCP Tool `read_file`. This will allow the agent to read entire files.

@@ -12,9 +12,9 @@ Call advanced reasoning LLMs to generate plans and instructions for coding agent
 
 Generate detailed design tasks with comprehensive UI/UX guidelines.
 
-### 👨‍💻 Actor
+### 👨‍💻 Implementation
 
-Meticulously implement planner and designer plans with thorough task tracking and high-quality code.
+The AI assistant in the IDE acts as the implementation engineer, meticulously implementing planner and designer plans with thorough task tracking and high-quality code.
 
 ### 📸 Screenshot
 
