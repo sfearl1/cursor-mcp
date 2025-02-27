@@ -14,7 +14,7 @@ import Anthropic from '@anthropic-ai/sdk';
  *   - Runs repomix to generate codebase content
  *   - Compiles an XML template with the task and codebase
  *   - Uses Claude 3.7 to generate detailed implementation steps
- *   - Creates tasks in the .cursor/tasks/ directory with agent-specific files
+ *   - Documents tasks in the .cursor/tasks.md file
  */
 
 export const agentTaskToolName = "agent_task";
@@ -126,29 +126,28 @@ export async function runAgentTaskTool(args: AgentTaskToolInput) {
     const cursorDir = resolveRoot('.cursor');
     await fs.mkdir(cursorDir, { recursive: true });
     
-    // Create tasks directory if it doesn't exist
-    const tasksDir = path.join(cursorDir, 'tasks');
-    await fs.mkdir(tasksDir, { recursive: true });
-
-    // Save tasks to agent-specific file in .cursor/tasks/
-    const taskFilename = `${agent}.md`;
-    const taskPath = path.join(tasksDir, taskFilename);
-    await fs.writeFile(taskPath, tasks);
-
-    // For backward compatibility, also update the legacy tasks.md file
-    // with a notice directing users to the agent-specific file
-    const legacyTasksPath = path.join(cursorDir, 'tasks.md');
-    const redirectNotice = `# Tasks have moved
-
-Tasks for the ${agent} agent are now located in [.cursor/tasks/${taskFilename}](./tasks/${taskFilename})
-
-This file is kept for backward compatibility but will be removed in a future version.`;
-    await fs.writeFile(legacyTasksPath, redirectNotice);
+    // Save tasks to tasks.md file in .cursor/
+    const tasksPath = path.join(cursorDir, 'tasks.md');
+    
+    // Add a header for the agent type
+    const formattedTasks = `# ${agent.charAt(0).toUpperCase() + agent.slice(1)} Tasks\n\n${tasks}`;
+    
+    // Check if the file exists and append or create as needed
+    try {
+      await fs.access(tasksPath);
+      // File exists, read its content
+      const existingContent = await fs.readFile(tasksPath, 'utf8');
+      // Append new tasks with a separator
+      await fs.writeFile(tasksPath, `${existingContent}\n\n---\n\n${formattedTasks}`);
+    } catch (err) {
+      // File doesn't exist, create it
+      await fs.writeFile(tasksPath, formattedTasks);
+    }
 
     return {
       content: [{
         type: "text",
-        text: `Generated ${agent} implementation steps in ${taskPath}`
+        text: `Generated ${agent} implementation steps in .cursor/tasks.md`
       }]
     };
   } catch (error) {

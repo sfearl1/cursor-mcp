@@ -1,0 +1,183 @@
+---
+description: Workflow - Read Before All Interactions
+globs: 
+alwaysApply: true
+---
+# Plan‑Act Workflow Configuration (.mdc)
+
+## Overview
+This configuration defines a bullet-proof, self-monitoring plan‑act workflow for Cursor Agentic AI.
+
+Agent commands (/plan, /act, /design) call MCP servers via Cursor Tools:
+- **agent_task**:
+  - [/plan] - calls `mcp_agent_task planner` for the Planner.
+  - [/act] - calls `mcp_agent_task actor` for the Actor.
+  - [/design] - calls `mcp_agent_task designer` for the Designer.
+
+All file read and write interactions flow through Filesystem MCP server tools:
+- **read_file**
+  - Reads the complete contents of a file.
+  - Input: `path` (string)  
+  - Reads file contents with UTF-8 encoding.
+- **read_multiple_files**
+  - Reads multiple files simultaneously.
+  - Input: `paths` (string[])  
+  - Failed reads won't stop the entire operation.
+- **write_file**
+  - Creates a new file or overwrites an existing file (exercise caution).
+  - Inputs:
+    - `path` (string): File location.
+    - `content` (string): File content.
+- **create_directory**
+  - Creates a new directory or ensures it exists.
+  - Input: `path` (string)  
+  - Creates parent directories if needed; succeeds silently if the directory exists.
+- **list_directory**
+  - Lists directory contents with [FILE] or [DIR] prefixes.
+  - Input: `path` (string).
+- **move_file**
+  - Moves or renames files and directories.
+  - Inputs:
+    - `source` (string)
+    - `destination` (string)  
+  - Fails if destination exists.
+- **search_files**
+  - Recursively searches for files/directories.
+  - Inputs:
+    - `path` (string): Starting directory.
+    - `pattern` (string): Search pattern.  
+  - Case-insensitive matching; returns full paths to matches.
+- **get_file_info**
+  - Retrieves detailed file/directory metadata.
+  - Input: `path` (string).  
+  - Returns: size, creation time, modified time, access time, type (file/directory), and permissions.
+- **list_allowed_directories**
+  - Lists all directories the server is allowed to access.
+  - No input required; returns directories with read/write access.
+
+---
+
+## Agent Roles and Guard Rails
+
+### Planner 
+**/plan**  
+- See @.cursor/rules/plan.mdc
+
+### Actor 
+**/act**  
+- See @.cursor/rules/actor.mdc
+
+---
+
+## Workflow Stages
+
+### 1. Planning Stage
+- **Task Definition:**  
+  The Planner outlines the overall objective and breaks it down into manageable subtasks.
+- **Context Gathering:**  
+  Use `read_file` or `read_multiple_files` to access historical context and relevant data.
+- **Plan Documentation:**  
+  Produce a comprehensive plan that includes:
+  - Task breakdown
+  - Technical architecture
+  - Dependencies and required resources
+- **Log Creation:**  
+  Write detailed logs for each planning action using the format:  
+  `[TIMESTAMP] [PLANNER] [ACTION] - [DETAILS]`
+- **Review & Validation:**  
+  Internally review the plan to ensure it aligns with project goals and meets all guard rails.
+
+### 2. Execution Stage
+- **Plan Handoff:**  
+  The Planner transfers the approved plan to the Actor.
+- **Precise Implementation:**  
+  The Actor begins executing tasks using `agent_task:actor` and necessary filesystem operations.
+- **Continuous Logging:**  
+  Log every action taken using the format:  
+  `[TIMESTAMP] [ACTOR] [ACTION] - [DETAILS]`
+- **Progress Verification:**  
+  Regularly verify that execution aligns with the documented plan.
+- **Error Detection:**  
+  Monitor for deviations; if any errors or context loss are detected, trigger an immediate alert and revert to the last checkpoint.
+
+### 3. Logging and Feedback Stage
+- **Centralized Log Storage:**  
+  Both agents write all logs to a persistent log file using `write_file`.
+- **Regular Reviews:**  
+  The Planner periodically reviews logs to maintain workflow integrity.
+- **Feedback Loop:**  
+  Any discrepancies are flagged immediately, and corrective measures are implemented before continuing.
+- **Final Reporting:**  
+  Once the task is complete, generate a comprehensive report summarizing all actions, decisions, and outcomes.
+
+---
+
+## MCP Tools Integration
+- **Agent Task Commands:**
+  - **Planner:** Use `agent_task:planner` to create and refine the plan.
+  - **Actor:** Use `agent_task:actor` to execute tasks precisely.
+- **Filesystem Operations:**
+  - Use `read_file` and `read_multiple_files` for context gathering.
+  - Use `write_file` to store logs and context files.
+  - Use `search_files` to quickly locate historical data and verify current states.
+
+---
+
+## Error Handling, Rollback, & Checkpoints
+- **Automatic Rollback:**  
+  On detecting deviation or context loss, automatically revert to the last confirmed valid state using stored logs.
+- **Alert System:**  
+  Any violation (e.g., unauthorized assumptions or incomplete logging) triggers an immediate alert to both agents.
+- **Checkpoint System:**  
+  Establish regular checkpoints during both planning and execution stages to secure context continuity.
+
+---
+
+## Detailed Logging Protocol
+- **Standard Format:**  
+  Every log entry must use:  
+  `[TIMESTAMP] [AGENT ROLE] [ACTION] - [DETAILS]`
+- **Persistence:**  
+  All logs are stored in designated, persistent files that are both human-readable and machine-parsable.
+- **Review Cycle:**  
+  The Planner periodically reviews logs to ensure ongoing adherence to workflow standards and to identify improvement areas.
+
+---
+
+## Tools & Additional MCP Guidelines
+
+- **UI Changes:**  
+  When making UI changes, use the `screenshot` tool to capture modifications.
+- **Complex Tasks:**
+  - For non-UI complex tasks, invoke `agent_task` with the "planner" agent type. Save the resulting plan to `.cursor/tasks/planner.md`.
+  - For UI-specific tasks, call `agent_task` with the "designer" agent type. Save the design plan to `.cursor/tasks/designer.md`.
+  - For thorough implementation, use `agent_task` with the "actor" agent type. Save implementation steps to `.cursor/tasks/actor.md`.
+- **Task File Management:**  
+  Each agent type stores tasks in separate files under the `.cursor/tasks/` directory to avoid overlap.
+- **Code Review & Reasoning:**  
+  After changes, use the `code_review` tool to create a diff and the `sequential_thinking` tool to analyze the changes.
+- **Filesystem Tools:**  
+  Use `read_file` for reading single files and `read_multiple_files` for reading multiple files simultaneously.
+
+---
+
+## Commit Protocol
+
+- **Versioning:**  
+  Use semantic versioning for releases.
+- **Commit Standards:**  
+  Use conventional commits. Keep commit messages clear and concise.
+- **Build Process:**  
+  After all changes are made, ALWAYS build the project with `npm run build`—ignore warnings and fix errors.
+- **Update Log:**  
+  Always append a one-sentence summary of changes in markdown format to `.cursor/updates.md` at the end of every agent interaction.  
+  If omitted, the command `/done` will trigger the build and update `.cursor/updates.md`.
+- **Git Update:**  
+  Finally, run `git add . && git commit -m "..."` to commit changes locally (do not push).
+
+---
+
+## Final Notes
+- This plan‑act workflow is designed to be robust, self-healing, and context-aware.
+- Both the Planner and Actor must maintain high standards of documentation and precision.
+- Integration with MCP tools is critical to ensure context preservation, error minimization, and full traceability of every action.

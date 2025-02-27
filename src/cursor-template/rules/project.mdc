@@ -1,0 +1,71 @@
+---
+description: Project Overview
+globs: 
+alwaysApply: true
+---
+# Project Overview
+
+We are building a Lit custom element wrapper around the Motion API to expose and enable animation of static elements in a declarative way. This brings Framer Motion animations to low-code static sites.
+
+---
+
+## Objectives
+
+- Create a lightweight, declarative wrapper that allows static HTML elements to be animated using Motion.dev.
+- Simplify the integration of Framer Motion animations for low-code environments.
+- Ensure the wrapper is reusable, maintainable, and well-typed.
+
+---
+
+## Tech Stack Overview
+
+- **Motion.dev:**  
+  Unified Motion One + Framer Motion libraries that bring Framer Motion animation to vanilla JS.
+  
+- **Lit 3 Element:**  
+  The Lit 3 element will serve as the wrapper around the Motion API.
+
+---
+
+## Components, Naming, & Directories
+
+- Keep components, utilities, and helpers small, modular, and typed with interfaces.
+- Place reusable logic in shared utilities or helpers.
+
+---
+
+## TypeScript & Syntax
+
+- Use strict mode; avoid using `any`.
+- Employ optional chaining and union types (avoid enums).
+
+---
+
+## File & Folder Names
+
+- Use kebab-case for naming (e.g., `src/components/my-component.tsx`).
+- Place shared types in `src/shared/types.ts` files.
+- Sort imports in the following order: external → internal → sibling → styles.
+
+---
+
+## Integration & API Usage
+
+- The Lit custom element will expose and reuse the vanilla JS Motion API.
+- JSON string objects passed via Lit attributes/properties will be parsed to configure the Motion animations.
+- Ensure that the custom element is compatible with static HTML environments and supports declarative animation configuration.
+
+---
+
+## Constraints & Acceptance Criteria
+
+- **Performance:** The wrapper must add minimal overhead.
+- **Compatibility:** It should work with modern browsers supporting Lit 3 and Motion.dev.
+- **Usability:** The API should be intuitive and documented for low-code developers.
+- **Testing:** Include unit tests for critical functionality and integration tests for the animation behavior.
+
+---
+
+## Expose & Reuse Motion API - Don't Reinvent It
+
+We focus on bringing Framer Motion animations to static HTML elements by exposing/reusing the vanilla JS Motion API in a thin, declarative Lit custom element wrapper. This is achieved by passing and parsing JSON string objects in the Lit attributes/properties.
