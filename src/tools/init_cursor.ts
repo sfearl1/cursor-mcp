@@ -11,6 +11,7 @@ export const initCursorToolDescription = 'Initializes the cursor-template direct
 // Input schema definition
 export const InitCursorToolSchema = z.object({
   destinationPath: z.string().describe('Full path where the template should be copied'),
+  projectDescription: z.string().optional().describe('Project description to populate the project.mdc file'),
 });
 
 type InitCursorToolInput = z.infer<typeof InitCursorToolSchema>;
@@ -72,7 +73,7 @@ async function ensureBuildTemplate(): Promise<string> {
 export async function runInitCursorTool(input: InitCursorToolInput): Promise<ServerResult> {
   try {
     // Validate input
-    const { destinationPath } = InitCursorToolSchema.parse(input);
+    const { destinationPath, projectDescription } = InitCursorToolSchema.parse(input);
     
     // Ensure template exists in build directory
     const buildTemplateDir = await ensureBuildTemplate();
@@ -88,6 +89,27 @@ export async function runInitCursorTool(input: InitCursorToolInput): Promise<Ser
     const destRulesDir = path.join(destDir, 'rules');
     await copyRecursive(rulesDir, destRulesDir, false);
     
+    // If project description is provided, update the project.mdc file
+    if (projectDescription) {
+      const projectMdcPath = path.join(destRulesDir, 'project.mdc');
+      try {
+        // Read the existing project.mdc file
+        const projectMdcContent = await fs.readFile(projectMdcPath, 'utf8');
+        
+        // Replace the project description in the file
+        // We'll look for the content between "# Project Overview" and the first "---" after that
+        const updatedContent = projectMdcContent.replace(
+          /(# Project Overview\n\n)(.*?)(\n\n---)/s,
+          `$1${projectDescription}$3`
+        );
+        
+        // Write the updated content back to the file
+        await fs.writeFile(projectMdcPath, updatedContent);
+      } catch (error) {
+        console.error('Error updating project.mdc:', error);
+      }
+    }
+    
     const tasksFile = path.join(buildTemplateDir, 'tasks.md');
     const destTasksFile = path.join(destDir, 'tasks.md');
     await fs.copyFile(tasksFile, destTasksFile);
@@ -97,7 +119,7 @@ export async function runInitCursorTool(input: InitCursorToolInput): Promise<Ser
     return {
       content: [{
         type: 'text',
-        text: `Successfully initialized cursor-template at ${destDir} with rules directory and tasks.md file`
+        text: `Successfully initialized cursor-template at ${destDir} with rules directory and tasks.md file${projectDescription ? ' and customized project description' : ''}`
       }]
     };
   } catch (error) {
