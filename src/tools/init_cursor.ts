@@ -18,15 +18,18 @@ type InitCursorToolInput = z.infer<typeof InitCursorToolSchema>;
 /**
  * Recursively copies files from source to destination directory
  */
-async function copyRecursive(src: string, dest: string): Promise<void> {
+async function copyRecursive(src: string, dest: string, isRootLevel = true): Promise<void> {
   const stats = await fs.stat(src);
+  const baseName = path.basename(src);
   
-  if (stats.isDirectory()) {
-    // Skip the agent-templates directory
-    if (path.basename(src) === 'agent-templates') {
+  // At root level, only copy rules directory and tasks.md file
+  if (isRootLevel) {
+    if (baseName !== 'rules' && baseName !== 'tasks.md') {
       return;
     }
-    
+  }
+  
+  if (stats.isDirectory()) {
     // Create destination directory if it doesn't exist
     await fs.mkdir(dest, { recursive: true });
     
@@ -37,7 +40,7 @@ async function copyRecursive(src: string, dest: string): Promise<void> {
     for (const entry of entries) {
       const srcPath = path.join(src, entry);
       const destPath = path.join(dest, entry);
-      await copyRecursive(srcPath, destPath);
+      await copyRecursive(srcPath, destPath, false);
     }
   } else {
     // Copy file
@@ -77,8 +80,17 @@ export async function runInitCursorTool(input: InitCursorToolInput): Promise<Ser
     // Create the .cursor directory path
     const destDir = path.join(destinationPath, '.cursor');
     
-    // Copy template files recursively from build to destination
-    await copyRecursive(buildTemplateDir, destDir);
+    // Create destination directory if it doesn't exist
+    await fs.mkdir(destDir, { recursive: true });
+    
+    // Copy only the rules directory and tasks.md file
+    const rulesDir = path.join(buildTemplateDir, 'rules');
+    const destRulesDir = path.join(destDir, 'rules');
+    await copyRecursive(rulesDir, destRulesDir, false);
+    
+    const tasksFile = path.join(buildTemplateDir, 'tasks.md');
+    const destTasksFile = path.join(destDir, 'tasks.md');
+    await fs.copyFile(tasksFile, destTasksFile);
     
     // Create tasks directory inside .cursor
     const tasksDir = path.join(destDir, 'tasks');
@@ -95,7 +107,7 @@ export async function runInitCursorTool(input: InitCursorToolInput): Promise<Ser
     return {
       content: [{
         type: 'text',
-        text: `Successfully initialized cursor-template at ${destDir} with tasks directory structure`
+        text: `Successfully initialized cursor-template at ${destDir} with rules directory and tasks.md file`
       }]
     };
   } catch (error) {
