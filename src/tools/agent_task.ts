@@ -25,7 +25,7 @@ export const AgentTaskToolSchema = z.object({
   task: z.string().describe("Task description"),
   code: z.array(z.string()).optional().describe("Array of files to analyze"),
   rules: z.array(z.string()).optional().describe("Array of rules to follow"),
-  agent: z.enum(["architect", "designer", "engineer"]).default("architect").describe("Agent type"),
+  agent: z.enum(["planner", "actor", "designer"]).default("planner").describe("Agent type"),
 });
 
 type AgentTaskToolInput = z.infer<typeof AgentTaskToolSchema>;
@@ -104,9 +104,9 @@ export async function runAgentTaskTool(args: AgentTaskToolInput) {
       throw new Error(`Invalid agent type: ${agent}. Supported types are: ${Object.keys(agentConfigs).join(', ')}`);
     }
 
-    // Engineer-specific validation
-    if (agent === 'engineer' && (!task || task.trim() === '')) {
-      throw new Error("Engineer role requires a detailed task description with implementation steps");
+    //  -specific validation
+    if (!task || task.trim() === '') {
+      throw new Error("agent_task requires a detailed task description");
     }
 
     // Initialize template builder

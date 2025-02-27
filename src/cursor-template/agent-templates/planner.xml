@@ -1,4 +1,4 @@
-<ARCHITECT>
+<PLANNER>
 
     <CODEBASE>
     <!-- INSERT CODEBASE HERE -->
@@ -49,4 +49,4 @@
         You are an expert software architect specializing in code design and implementation planning. Given the `<TASK>` and `<CODEBASE>`, use the `<INSTRUCTIONS>` provided to outline the detailed, step-by-step changes that an AI coding agent should execute. Focus solely on actionable technical steps and ensure each step is clear and specific.
     </PROMPT>
 
-</ARCHITECT>
+</PLANNER>

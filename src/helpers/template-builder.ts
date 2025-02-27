@@ -106,7 +106,7 @@ export class TemplateBuilder {
     }
   }
 
-  async compile(task: string, code?: string[], rulesPath?: string, agentType: AgentType = 'architect'): Promise<CompiledTemplate> {
+  async compile(task: string, code?: string[], rulesPath?: string, agentType: AgentType = 'planner'): Promise<CompiledTemplate> {
     try {
       // Get codebase content based on input method
       let codebaseContent: string;

@@ -37,7 +37,7 @@ import {
  * A minimal MCP server providing four Cursor Tools:
  *   1) InitCursor
  *   2) Screenshot
- *   3) AgentTask (with architect, designer, and engineer roles)
+ *   3) AgentTask (with planner, actor, designer tools)
  *   4) CodeReview
  */
 
@@ -90,8 +90,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             task: { type: "string", description: "Task description" },
             agent: { 
               type: "string", 
-              description: "Agent type (architect, designer, or engineer)", 
-              enum: ["architect", "designer", "engineer"] 
+              description: "Agent type (planner, actor, designer)", 
+              enum: ["planner", "actor", "designer"] 
             },
             code: { type: "array", description: "Array of files to analyze" },
           },

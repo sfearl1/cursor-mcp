@@ -4,7 +4,7 @@ Welcome to your AI-powered development toolkit, designed as a Model Context Prot
 
 ## ✨ Features
 
-### 🏗️ Code Architect
+### 🏗️ Planner
 
 Call advanced reasoning LLMs to generate plans and instructions for coding agents.
 
@@ -12,9 +12,9 @@ Call advanced reasoning LLMs to generate plans and instructions for coding agent
 
 Generate detailed design tasks with comprehensive UI/UX guidelines.
 
-### 👨‍💻 Engineer
+### 👨‍💻 Actor
 
-Meticulously implement architect and designer plans with thorough task tracking and high-quality code. The engineer role:
+Meticulously implement planner and designer plans with thorough task tracking and high-quality code. The actor role:
 - Methodically tracks progress by updating task lists as items are completed
 - Prevents circular or redundant work by recognizing already-completed tasks
 - Produces comprehensive, well-tested implementations with proper error handling

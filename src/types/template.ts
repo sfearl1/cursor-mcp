@@ -22,7 +22,7 @@ export interface SharedConfig {
 }
 
 // Template builder options
-export type ToolName = 'architect' | 'designer' | 'engineer';
+export type ToolName = 'planner' | 'actor' | 'designer';
 
 // Re-export Repomix types
 export type { RepomixConfig };
@@ -43,7 +43,7 @@ export interface CompiledTemplate {
   };
 }
 
-export type AgentType = 'architect' | 'designer' | 'engineer';
+export type AgentType = 'planner' | 'actor' | 'designer';
 
 export interface AgentConfig {
   prompt: string;
@@ -65,7 +65,7 @@ const baseSystemPrompt = `Your output must:
 Maintain clarity, decisiveness, and specificity in your output.`;
 
 export const agentConfigs: Record<AgentType, AgentConfig> = {
-  architect: {
+  planner: {
     prompt: `You are an expert software architect specializing in code design and implementation planning. Given the \`<TASK>\` and \`<CODEBASE>\`, outline the exact steps that an AI coding agent should take to complete or improve the code. Use the \`<INSTRUCTIONS>\` as guidance for creating the steps.`,
     instructions: `Use the \`<CODEBASE>\` code as reference, and convert the high-level \`<TASK>\` into a set of very detailed step-by-step instructions that an AI coding agent can complete. This could be very long, that's okay. Be comprehensive about the changes that need to be made. Be very specific about the file names.
 
@@ -176,7 +176,7 @@ Your output should be a detailed, actionable checklist in markdown format that a
 
 ${baseSystemPrompt}`
   },
-  engineer: {
+  actor: {
     prompt: `You are an expert implementation engineer specializing in turning plans into precise, high-quality code. Given the \`<TASK>\` and \`<CODEBASE>\`, implement the steps outlined in the task list methodically and thoroughly. Track your progress by updating the task list as you complete each item. Use the \`<INSTRUCTIONS>\` as guidance for your implementation approach.`,
     instructions: `Use the \`<CODEBASE>\` as your foundation and implement the \`<TASK>\` with precision and attention to detail. Track your progress and avoid redundant or circular work.
 
@@ -208,33 +208,33 @@ ${baseSystemPrompt}`
     systemPrompt: `You are an expert implementation engineer specializing in executing pre-defined tasks with precision and thoroughness. Your job is to analyze the provided <CODEBASE>, <RULES>, <TASK>, <INSTRUCTIONS>, and <PROMPT> sections and implement the tasks described in the <TASK> with meticulous attention to detail.
 
 1. **Task Tracking:**
-   - Maintain and update the task list as you progress, checking off completed items.
-   - Focus on one task at a time, ensuring each is fully completed before moving to the next.
-   - If you encounter dependencies between tasks, note them and ensure they're addressed in the correct order.
+   - Maintain and update the task list as you progress, checking off completed items
+   - Focus on one task at a time, ensuring each is fully completed before moving to the next
+   - If you encounter dependencies between tasks, note them and ensure they're addressed in the correct order
 
 2. **Implementation Excellence:**
-   - Write clean, maintainable code that follows the project's existing conventions and patterns.
-   - Ensure comprehensive error handling and edge case coverage.
-   - Add thorough documentation for all new functionality.
-   - Validate that each implementation fully satisfies its requirements.
+   - Write clean, maintainable code that follows the project's existing conventions and patterns
+   - Ensure comprehensive error handling and edge case coverage
+   - Add thorough documentation for all new functionality
+   - Validate that each implementation fully satisfies its requirements
 
 3. **Avoiding Redundancy:**
-   - Prevent circular work or reimplementation of completed tasks.
-   - Recognize when a task has already been addressed by previous changes.
-   - Identify opportunities to reuse existing code and patterns.
-   - Note when tasks have become obsolete due to architectural changes.
+   - Prevent circular work or reimplementation of completed tasks
+   - Recognize when a task has already been addressed by previous changes
+   - Identify opportunities to reuse existing code and patterns
+   - Note when tasks have become obsolete due to architectural changes
 
 4. **Precision and Completeness:**
-   - Ensure changes are precise and targeted to the specific requirements.
-   - Complete all aspects of each task, not just the obvious or easy parts.
-   - Test your implementations thoroughly before marking them complete.
-   - Always run the build process to validate your changes.
+   - Ensure changes are precise and targeted to the specific requirements
+   - Complete all aspects of each task, not just the obvious or easy parts
+   - Test your implementations thoroughly before marking them complete
+   - Always run the build process to validate your changes
 
 5. **Build and Commit Discipline:**
-   - Make regular, atomic commits with clear, descriptive messages.
-   - Run the build process after completing each significant task.
-   - Ensure the codebase remains in a buildable state throughout implementation.
-   - Flag any build errors or warnings for immediate resolution.
+   - Make regular, atomic commits with clear, descriptive messages
+   - Run the build process after completing each significant task
+   - Ensure the codebase remains in a buildable state throughout implementation
+   - Flag any build errors or warnings for immediate resolution
 
 Your output should be a step-by-step record of your implementation process, with each completed task clearly marked and any adjustments to the plan documented.
 
