@@ -1,6 +1,6 @@
-# 🤖 AI Development Assistant MCP Server
+# 🤖 Cursor Tools MCP Server
 
-Welcome to your AI-powered development toolkit, designed as a Model Context Protocol (MCP) server for Cursor! This project provides intelligent coding assistance through custom AI tools. Note that this is mostly a tutorial demo, and not a production-ready tool.
+Cursor Tools development toolkit, designed as a Model Context Protocol (MCP) server for Cursor! This project provides intelligent coding assistance through custom AI tools. Note that this is mostly a tutorial demo, and not a production-ready tool.
 
 ## ✨ Features
 
@@ -14,14 +14,9 @@ Generate detailed design tasks with comprehensive UI/UX guidelines.
 
 ### 👨‍💻 Actor
 
-Meticulously implement planner and designer plans with thorough task tracking and high-quality code. The actor role:
-- Methodically tracks progress by updating task lists as items are completed
-- Prevents circular or redundant work by recognizing already-completed tasks
-- Produces comprehensive, well-tested implementations with proper error handling
-- Ensures code quality with thorough documentation and TypeScript safety
-- Makes focused, atomic commits with clear messages
+Meticulously implement architect and designer plans with thorough task tracking and high-quality code.
 
-### 📸 Screenshot Buddy
+### 📸 Screenshot
 
 Take UI design screenshots and use them with the composer agent.
 
@@ -29,20 +24,9 @@ Take UI design screenshots and use them with the composer agent.
 
 Use git diffs to trigger code reviews.
 
-### 🚀 InitCursor Tool
-Initializes a new project with the cursor-template directory structure. This tool copies the template files from the source directory to a specified destination path.
+### 🚀 Init Cursor 
 
-**Input Parameters:**
-- `destinationPath` (required): Full path where the template should be copied
-
-**Example Usage:**
-```typescript
-const result = await runInitCursorTool({
-  destinationPath: "/path/to/your/project/.cursor"
-});
-```
-
-The tool will create the `.cursor` directory at the specified path and copy all template files and directories into it.
+Initializes a new project and will create the `.cursor` directory at the specified path and copy all template files and directories into it.
 
 ## 🚀 Getting Started
 
@@ -79,11 +63,11 @@ This project is designed to be used as an MCP server in Cursor. Here's how to se
 2. Go to `Cursor Settings > Features > MCP`
 3. Click `+ Add New MCP Server`
 4. Fill out the form:
-   - **Name**: AI Development Assistant
+   - **Name**: Cursor Tools
    - **Type**: stdio
    - **Command**: `node /path/to/your/project/dist/index.js`
 
-> 📘 **Pro Tip**: You might need to use the full path to your project's built index.js file.
+> 📘 **Note**: You might need to use the full path to your project's built index.js file.
 
 After adding the server, you should see your tools listed under "Available Tools". If not, try clicking the refresh button in the top right corner of the MCP server section.
 
@@ -108,12 +92,14 @@ The agent will ask for your approval before making any tool calls.
 ```
 src/
 ├── tools/
-│   ├── architect.ts    # Code structure generator
-│   ├── screenshot.ts   # Screenshot analysis tool
+│   ├── architect.ts    # Architect tool
+│   ├── engineer.ts     # Engineer tool
+│   ├── designer.ts     # Designer tool
+│   ├── screenshot.ts   # Screenshot tool
 │   └── codeReview.ts   # Code review tool
 ├── env/
 │   └── keys.ts         # Environment configuration (add your API keys here!)
-└── index.ts           # Main entry point
+└── index.ts            # Main entry point
 ```
 
 ## 🤝 Contributing
@@ -134,7 +120,5 @@ Found a bug or need help? Open an issue with:
 4. Your environment details
 
 ---
-
-I'll be honest though, this is a tutorial demo, and not a production-ready tool so I likely won't be fixing issues. But feel free to fork it and make it your own!
 
 Made with ❤️ by developers, for developers
