@@ -14,7 +14,7 @@ Generate detailed design tasks with comprehensive UI/UX guidelines.
 
 ### 👨‍💻 Actor
 
-Meticulously implement architect and designer plans with thorough task tracking and high-quality code.
+Meticulously implement planner and designer plans with thorough task tracking and high-quality code.
 
 ### 📸 Screenshot
 
@@ -80,7 +80,7 @@ Once configured, you can use these tools directly in Cursor's Composer. The AI w
 For example, try typing in Composer:
 
 - "Review this code for best practices"
-- "Help me architect a new feature"
+- "Help me plan a new feature"
 - "Analyze this UI screenshot"
 
 The agent will ask for your approval before making any tool calls.
@@ -92,10 +92,8 @@ The agent will ask for your approval before making any tool calls.
 ```
 src/
 ├── tools/
-│   ├── architect.ts    # Architect tool
-│   ├── engineer.ts     # Engineer tool
-│   ├── designer.ts     # Designer tool
-│   ├── screenshot.ts   # Screenshot tool
+│   ├── planner.ts    # Code structure generator
+│   ├── screenshot.ts   # Screenshot analysis tool
 │   └── codeReview.ts   # Code review tool
 ├── env/
 │   └── keys.ts         # Environment configuration (add your API keys here!)
